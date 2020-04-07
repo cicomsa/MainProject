@@ -1,14 +1,12 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
+import Link from 'next/link'
 
-const Index = ({ pathname }) => {
+const Index = () => {
   return (
-    <div>Main Page Content</div>
+    <Link href='/planner'>
+      <a>Planner</a>
+    </Link>
   )
 }
 
 export default Index
-
-Index.propTypes = {
-  pathname: PropTypes.string.isRequired
-}

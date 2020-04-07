@@ -18,8 +18,7 @@ const theme = {
 
 class MyApp extends App {
   render() {
-    console.log(this.props)
-    const { Component, router } = this.props
+    const { Component, pageProps } = this.props
     return (
       <>
         <Head>
@@ -28,7 +27,7 @@ class MyApp extends App {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <ThemeProvider theme={theme}>
-              <Component pathname={router.pathname} />
+              <Component {...pageProps} />
             </ThemeProvider>
           </PersistGate>
         </Provider>

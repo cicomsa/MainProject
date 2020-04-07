@@ -15,12 +15,12 @@ const Body = styled.section`
 const Content = styled.div`
   margin: 30px;
 `
-const Index = ({ pathname }) => {
+const Index = () => {
   return (
     <Body>
       <Title>Main</Title>
       <Content>
-        <Main pathname={pathname} />
+        <Main />
       </Content>
     </Body>
   )

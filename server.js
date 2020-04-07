@@ -11,7 +11,11 @@ app.prepare()
     const server = express();
 
     server.get('/planner', (req, res) => {
-      return app.render(req, res, '/planner');
+      return app.render(req, res, '/planner')
+    })
+
+    server.get('/planner/:id', (req, res) => {
+      return app.render(req, res, '/planner', { id: req.params.id })
     })
 
     server.get('*', (req, res) => {

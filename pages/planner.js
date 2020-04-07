@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Planner from '../src/components/pages/planner'
+import planners from '../src/components/pages/planner/planners.json'
 
 const Title = styled.h1`
   font-size: 50px;
@@ -15,15 +16,21 @@ const Body = styled.section`
 const Content = styled.div`
   margin: 30px;
 `
-const Index = ({ pathname }) => {
+const Index = ({ planner }) => {
   return (
     <Body>
       <Title>Planner</Title>
       <Content>
-        <Planner pathname={pathname} />
+        <Planner />
       </Content>
     </Body>
   )
 }
 
 export default Index
+
+Index.getInitialProps = async ({ query }) => {
+  return {
+    planner: planners[query.id]
+  }
+}

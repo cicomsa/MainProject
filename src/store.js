@@ -9,8 +9,6 @@ if (process.browser && window.__REDUX_DEVTOOLS_EXTENSION__) {
   devTools = window.__REDUX_DEVTOOLS_EXTENSION__()
 }
 
-console.log(reducers)
-
 const enhancer = compose(
   applyMiddleware(ReduxThunk),
   devTools
