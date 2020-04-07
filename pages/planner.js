@@ -1,16 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
-import Main from '../src/components/pages/main'
+import Planner from '../src/components/pages/planner'
 
 const Title = styled.h1`
   font-size: 50px;
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.secondary};
   text-align: ${({ theme }) => theme.horizontalAlignment.center};
 `
 
 const Body = styled.section`
   margin: 1rem;
-  border: 1px solid ${({ theme }) => theme.colors.primary};
+  border: 1px solid ${({ theme }) => theme.colors.secondary};
 `
 const Content = styled.div`
   margin: 30px;
@@ -18,9 +18,9 @@ const Content = styled.div`
 const Index = ({ pathname }) => {
   return (
     <Body>
-      <Title>Main</Title>
+      <Title>Planner</Title>
       <Content>
-        <Main pathname={pathname} />
+        <Planner pathname={pathname} />
       </Content>
     </Body>
   )

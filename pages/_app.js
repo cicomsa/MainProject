@@ -8,13 +8,18 @@ import { PersistGate } from 'redux-persist/integration/react'
 
 const theme = {
   colors: {
-    primary: 'green'
+    primary: 'green',
+    secondary: 'blue'
+  },
+  horizontalAlignment: {
+    center: 'center'
   }
 }
 
 class MyApp extends App {
   render() {
-    const { Component, pageProps } = this.props
+    console.log(this.props)
+    const { Component, router } = this.props
     return (
       <>
         <Head>
@@ -23,7 +28,7 @@ class MyApp extends App {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <ThemeProvider theme={theme}>
-              <Component {...pageProps} />
+              <Component pathname={router.pathname} />
             </ThemeProvider>
           </PersistGate>
         </Provider>
