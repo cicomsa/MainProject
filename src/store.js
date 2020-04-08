@@ -1,8 +1,6 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
-import { persistStore, persistCombineReducers } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
 
 let devTools = f => f
 if (process.browser && window.__REDUX_DEVTOOLS_EXTENSION__) {
@@ -14,14 +12,24 @@ const enhancer = compose(
   devTools
 );
 
-const persistConfig = {
-  key: 'root',
-  storage
+let store
+
+if (process.browser) {
+  const { persistStore, persistCombineReducers } = require('redux-persist')
+  const storage = require('redux-persist/lib/storage').default;
+
+  const persistConfig = {
+    key: 'root',
+    storage
+  }
+
+  const persistedReducer = persistCombineReducers(persistConfig, reducers)
+
+  store = createStore(persistedReducer, enhancer)
+  store.__PERSISTOR = persistStore(store)
+} else {
+  const reducer = combineReducers(reducers)
+  store = createStore(reducer, enhancer)
 }
 
-const persistedReducer = persistCombineReducers(persistConfig, reducers)
-
-const store = createStore(persistedReducer, enhancer)
-const persistor = persistStore(store)
-
-export { store, persistor }
+export default store

@@ -9,7 +9,7 @@ const Title = styled.h1`
   text-align: ${({ theme }) => theme.horizontalAlignment.center};
 `
 
-const Body = styled.section`
+const Body = styled.div`
   margin: 1rem;
   border: 1px solid ${({ theme }) => theme.colors.secondary};
 `

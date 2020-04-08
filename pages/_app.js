@@ -2,7 +2,7 @@ import App from 'next/app'
 import Head from 'next/head'
 import React from 'react'
 import { Provider } from 'react-redux';
-import { store, persistor } from '../src/store'
+import store from '../src/store'
 import { ThemeProvider } from 'styled-components'
 import { PersistGate } from 'redux-persist/integration/react'
 
@@ -25,7 +25,7 @@ class MyApp extends App {
           <title>Main Project</title>
         </Head>
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
+          <PersistGate loading={null} persistor={store.__PERSISTOR}>
             <ThemeProvider theme={theme}>
               <Component {...pageProps} />
             </ThemeProvider>
