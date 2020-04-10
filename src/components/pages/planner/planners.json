@@ -1,9 +1,9 @@
 {
-  "weekly": {
+  "drafts": {
     "title": "test post",
     "content": "Hey some post content"
   },
-  "monthly": {
+  "drafts/weekly": {
     "title": "second post",
     "content": "Hey this is the second post content"
   }

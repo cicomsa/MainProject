@@ -14,8 +14,12 @@ app.prepare()
       return app.render(req, res, '/planner')
     })
 
-    server.get('/planner/:id', (req, res) => {
-      return app.render(req, res, '/planner', { id: req.params.id })
+    server.get('/planner/:handle', (req, res) => {
+      return app.render(req, res, '/planner', { handle: req.params.handle })
+    })
+
+    server.get('/planner/:handle/:category', (req, res) => {
+      return app.render(req, res, '/planner', { handle: req.params.handle, category: req.params.category })
     })
 
     server.get('*', (req, res) => {

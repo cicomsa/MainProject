@@ -31,6 +31,6 @@ export default Index
 
 Index.getInitialProps = async ({ query }) => {
   return {
-    planner: planners[query.id]
+    planner: planners[query.handle]
   }
 }
