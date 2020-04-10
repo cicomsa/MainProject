@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
@@ -12,6 +12,16 @@ const Weeklies = styled.div`
 `
 
 const Index = ({ category }) => {
+  const [weeklies, setWeeklies] = useState(1)
+  const displayWeeklies = []
+
+  for (let i = 0; i < weeklies; i++) {
+    displayWeeklies.push(<Weekly key={`week${i + 1}`} />)
+  }
+
+  const addWeek = () => setWeeklies(weeklies + 1)
+  const removeWeek = () => setWeeklies(weeklies - 1)
+
   return (
     <>
       <Links>
@@ -27,12 +37,11 @@ const Index = ({ category }) => {
         )}
       </Links>
       {/weekly/.test(category) && (
-        <Weeklies>
-          <Weekly />
-          <Weekly />
-          <Weekly />
-          <Weekly />
-        </Weeklies>
+        <>
+          <Weeklies>{displayWeeklies}</Weeklies>
+          <button onClick={addWeek}>+</button>
+          {weeklies > 0 && <button onClick={removeWeek}>-</button>}
+        </>
       )}
     </>
   )
