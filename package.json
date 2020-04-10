@@ -11,6 +11,7 @@
   "author": "Ioana Comsa",
   "license": "ISC",
   "dependencies": {
+    "autosize": "^4.0.2",
     "express": "^4.17.1",
     "next": "^9.3.4",
     "react": "^16.13.1",
