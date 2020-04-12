@@ -19,13 +19,12 @@ const Index = () => {
           <a>Main Planner</a>
         </Link>
       )}
-
       {!/drafts/.test(handle) && (
         <Link href='/planner/drafts'>
           <a>Drafts</a>
         </Link>
       )}
-      {/drafts/.test(handle) && <Drafts category={category}/>}
+      {/drafts/.test(handle) && <Drafts category={category} />}
     </>
   )
 }
