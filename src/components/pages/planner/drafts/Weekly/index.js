@@ -27,7 +27,7 @@ const CustomEditor = {
   isBoldMarkActive(editor) {
     const [match] = Editor.nodes(editor, {
       match: n => n.bold === true,
-      universal: true,
+      universal: false,
     })
 
     return !!match
@@ -103,7 +103,6 @@ const App = () => {
   const isCodeBlockHotkey = isHotkey('`')
 
   const renderElement = useCallback(props => {
-    // console.log(props)
     switch (props.element.type) {
       case 'code':
         return <pre {...props.attributes}>{props.children}</pre>
@@ -121,48 +120,44 @@ const App = () => {
   }, [])
 
   return (
-    // <Container>
-    //   {days.map(day => {
-    //     return (
-    //       <Form key={day}>
-    //         <p>{day}</p>
-    //         {/* <Textarea onChange={e => autosize(e.target)} /> */}
-    //         <TextEditor>
-    <Slate editor={editor} value={value} onChange={value => setValue(value)}>
-      <Editable
-        renderElement={renderElement}
-        renderLeaf={renderLeaf}
-        onKeyDown={event => {
-          console.log('asdas')
+    <Container>
+      {days.map(day => {
+        return (
+          <Form key={day}>
+            <p>{day}</p>
+            <TextEditor>
+              <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+                <Editable
+                  renderElement={renderElement}
+                  renderLeaf={renderLeaf}
+                  onKeyDown={event => {
+                    switch (true) {
+                      case isCodeBlockHotkey(event): {
+                        event.preventDefault()
+                        CustomEditor.toggleCodeBlock(editor)
+                        break
+                      }
 
-          // Replace the `onKeyDown` logic with our new commands.
-          switch (true) {
-            case isCodeBlockHotkey(event): {
-              event.preventDefault()
-              CustomEditor.toggleCodeBlock(editor)
-              break
-            }
+                      case isBoldHotkey(event): {
+                        event.preventDefault()
+                        CustomEditor.toggleBoldMark(editor)
+                        break
+                      }
 
-            case isBoldHotkey(event): {
-              event.preventDefault()
-              CustomEditor.toggleBoldMark(editor)
-              break
-            }
-
-            case isItalicHotkey(event): {
-              event.preventDefault()
-              CustomEditor.toggleItalicMark(editor)
-              break
-            }
-          }
-        }}
-      />
-    </Slate>
-    //         </TextEditor>
-    //       </Form>
-    //     )
-    //   })}
-    // </Container>
+                      case isItalicHotkey(event): {
+                        event.preventDefault()
+                        CustomEditor.toggleItalicMark(editor)
+                        break
+                      }
+                    }
+                  }}
+                />
+              </Slate>
+            </TextEditor>
+          </Form>
+        )
+      })}
+    </Container>
   )
 }
 
