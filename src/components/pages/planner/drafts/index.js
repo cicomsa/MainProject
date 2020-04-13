@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
@@ -16,19 +16,23 @@ const Weeklies = styled.div`
 const Index = ({ category }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   const [weeklies, setWeeklies] = useState(1)
-  const displayWeeklies = []
-  const editors = {}
+  const [content, setContent] = useState({})
+  let editors = {}
 
-  for (let i = 0; i < weeklies * days.length; i++) {
-    editors[`editor${i + 1}`] = useMemo(() => withReact(createEditor()), [])
-  }
+  useEffect(() => {
+    for (let i = 0; i < weeklies * days.length; i++) {
+      // editors[`editor${i + 1}`] = useMemo(() => withReact(createEditor()), [])
+      editors[`editor${i + 1}`] = withReact(createEditor())
+    }
 
-  const content = { days: days, editors }
+    const contents = { days: days, editors }
 
-  for (let i = 0; i < weeklies; i++) {
-    if (weeklies > 1 && i > 0) content.days = content.days.concat(days)
-    displayWeeklies.push(<Weekly key={`week${i + 1}`} content={content} />)
-  }
+    for (let i = 0; i < weeklies; i++) {
+      if (weeklies > 1 && i > 0) contents.days = contents.days.concat(days)
+    }
+
+    setContent(contents)
+  }, [weeklies])
 
   const addWeek = () => setWeeklies(weeklies + 1)
   const removeWeek = () => setWeeklies(weeklies - 1)
@@ -49,7 +53,9 @@ const Index = ({ category }) => {
       </Links>
       {/weekly/.test(category) && (
         <>
-          <Weeklies>{displayWeeklies}</Weeklies>
+          <Weeklies>
+            <Weekly content={content} weeklies={weeklies} />
+          </Weeklies>
           <button onClick={addWeek}>+</button>
           {weeklies > 0 && <button onClick={removeWeek}>-</button>}
         </>

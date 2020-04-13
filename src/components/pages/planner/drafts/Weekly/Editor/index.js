@@ -52,12 +52,10 @@ const returnElement = (element, attributes, children) => {
 
 const Leaf = props => {
   const { leaf, attributes, children } = props
-  console.log(leaf)
   return returnElement(leaf, attributes, children)
 }
 
 const Index = ({ editor, value, setValue }) => {
-
   const isBoldHotkey = isHotkey('mod+b')
   const isItalicHotkey = isHotkey('mod+i')
   const isCodeBlockHotkey = isHotkey('`')
@@ -93,15 +91,19 @@ const Index = ({ editor, value, setValue }) => {
     }
   }
 
+  if (editor) editor.children = value
+
   return (
     <TextEditor>
-      <Slate editor={editor} value={value} onChange={value => setValue(value)}>
-        <Editable
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          onKeyDown={event => onKeyDown(event, editor)}
-        />
-      </Slate>
+      {editor && (
+        <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+          <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            onKeyDown={event => onKeyDown(event, editor)}
+          />
+        </Slate>
+      )}
     </TextEditor>
   )
 }
