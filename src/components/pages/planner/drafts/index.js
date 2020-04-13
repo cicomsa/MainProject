@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
+import { createEditor } from 'slate'
+import { withReact } from 'slate-react'
 import Weekly from './Weekly'
 
 const Links = styled.div`
@@ -12,11 +14,20 @@ const Weeklies = styled.div`
 `
 
 const Index = ({ category }) => {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   const [weeklies, setWeeklies] = useState(1)
   const displayWeeklies = []
+  const editors = {}
+
+  for (let i = 0; i < weeklies * days.length; i++) {
+    editors[`editor${i + 1}`] = useMemo(() => withReact(createEditor()), [])
+  }
+
+  const content = { days: days, editors }
 
   for (let i = 0; i < weeklies; i++) {
-    displayWeeklies.push(<Weekly key={`week${i + 1}`} />)
+    if (weeklies > 1 && i > 0) content.days = content.days.concat(days)
+    displayWeeklies.push(<Weekly key={`week${i + 1}`} content={content} />)
   }
 
   const addWeek = () => setWeeklies(weeklies + 1)

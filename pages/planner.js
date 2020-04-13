@@ -11,10 +11,10 @@ const Title = styled.h1`
 
 const Body = styled.div`
   margin: 1rem;
-  border: 1px solid ${({ theme }) => theme.colors.secondary};
+  // border: 1px solid ${({ theme }) => theme.colors.secondary};
 `
 const Content = styled.div`
-  margin: 30px;
+  // margin: 30px;
 `
 const Index = ({ planner }) => {
   return (
