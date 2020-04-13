@@ -14,87 +14,72 @@ const Container = styled.div`
 const Form = styled.div`
   border-right: 1px solid orange;
   text-align: center;
-  width: 100%;
+  width: 150px;
 `
 const TextEditor = styled.div`
-  border: 1px solid red;
-  display: block;
-  height: 50px;
-  margin: auto;
-  width: 95%;
+  div[role="textbox"] {
+    border: 1px solid orange;
+    display: block;
+    height: 150px;
+    margin: auto;
+    width: 95%;
+  }
 `
 const CustomEditor = {
-  isBoldMarkActive(editor) {
+  isMarkActive(editor, mark) {
     const [match] = Editor.nodes(editor, {
-      match: n => n.bold === true,
-      universal: false,
+      match: n => n.type === mark,
     })
 
     return !!match
   },
 
-  isCodeBlockActive(editor) {
-    const [match] = Editor.nodes(editor, {
-      match: n => n.type === 'code',
-    })
-
-    return !!match
-  },
-
-  isItalicMarkActive(editor) {
-    const [match] = Editor.nodes(editor, {
-      match: n => n.italic === true,
-      universal: true,
-    })
-
-    return !!match
-  },
-
-  toggleBoldMark(editor) {
-    const isActive = CustomEditor.isBoldMarkActive(editor)
+  toggleMark(editor, mark) {
+    const isActive = CustomEditor.isMarkActive(editor, mark)
     Transforms.setNodes(
       editor,
-      { bold: isActive ? null : true },
-      { match: n => Text.isText(n), split: true }
-    )
-  },
-
-  toggleCodeBlock(editor) {
-    const isActive = CustomEditor.isCodeBlockActive(editor)
-    Transforms.setNodes(
-      editor,
-      { type: isActive ? null : 'code' },
-      { match: n => Editor.isBlock(editor, n) }
-    )
-  },
-
-  toggleItalicMark(editor) {
-    const isActive = CustomEditor.isItalicMarkActive(editor)
-    Transforms.setNodes(
-      editor,
-      { italic: isActive ? null : true },
+      { type: isActive ? null : mark },
       { match: n => Text.isText(n), split: true }
     )
   },
 }
 
+const returnElement = (element, attributes, children) => {
+  switch (element.type) {
+    case 'code':
+      return <pre {...attributes}>{children}</pre>
+    case 'underline':
+      return <u {...attributes}>{children}</u>
+    case 'list':
+      return <li {...attributes}>{children}</li>
+    case 'bold':
+      return <strong {...attributes}>{children}</strong>
+    case 'italic':
+      return <em {...attributes}>{children}</em>
+    default:
+      return <span {...attributes}>{children}</span>
+  }
+}
+
 const Leaf = props => {
-  return (
-    <>
-      {props.leaf.bold && !props.leaf.italic && <strong {...props.attributes}>{props.children}</strong>}
-      {!props.leaf.bold && props.leaf.italic && <em {...props.attributes}>{props.children}</em>}
-      {props.leaf.bold && props.leaf.italic && <strong><em {...props.attributes}>{props.children}</em></strong>}
-      {!props.leaf.bold && !props.leaf.italic && <span {...props.attributes}>{props.children}</span>}
-    </>
-  )
+  const { leaf, attributes, children } = props
+  console.log(leaf)
+  return returnElement(leaf, attributes, children)
 }
 
 const App = () => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   const editor = useMemo(() => withReact(createEditor()), [])
+  const editor1 = useMemo(() => withReact(createEditor()), [])
   const [value, setValue] = useState([
     {
       type: 'paragraph',
+      children: [{ text: '' }],
+    },
+  ])
+  const [value1, setValue1] = useState([
+    {
+      type: 'italic',
       children: [{ text: '' }],
     },
   ])
@@ -103,60 +88,63 @@ const App = () => {
   const isCodeBlockHotkey = isHotkey('`')
 
   const renderElement = useCallback(props => {
-    switch (props.element.type) {
-      case 'code':
-        return <pre {...props.attributes}>{props.children}</pre>
-      case 'underline':
-        return <u {...props.attributes}>{props.children}</u>
-      case 'list':
-        return <li {...props.attributes}>{props.children}</li>
-      default:
-        return <span {...props.attributes}>{props.children}</span>
-    }
+    const { attributes, children, element } = props
+    return returnElement(element, attributes, children)
   }, [])
 
   const renderLeaf = useCallback(props => {
     return <Leaf {...props} />
   }, [])
 
+  const onKeyDown = (event, editor) => {
+    switch (true) {
+      case isCodeBlockHotkey(event): {
+        event.preventDefault()
+        CustomEditor.toggleMark(editor, 'code')
+        break
+      }
+
+      case isBoldHotkey(event): {
+        event.preventDefault()
+        CustomEditor.toggleMark(editor, 'bold')
+        break
+      }
+
+      case isItalicHotkey(event): {
+        event.preventDefault()
+        CustomEditor.toggleMark(editor, 'italic')
+        break
+      }
+    }
+  }
+
   return (
     <Container>
-      {days.map(day => {
+      {/* {days.map(day => {
         return (
           <Form key={day}>
             <p>{day}</p>
-            <TextEditor>
-              <Slate editor={editor} value={value} onChange={value => setValue(value)}>
-                <Editable
-                  renderElement={renderElement}
-                  renderLeaf={renderLeaf}
-                  onKeyDown={event => {
-                    switch (true) {
-                      case isCodeBlockHotkey(event): {
-                        event.preventDefault()
-                        CustomEditor.toggleCodeBlock(editor)
-                        break
-                      }
-
-                      case isBoldHotkey(event): {
-                        event.preventDefault()
-                        CustomEditor.toggleBoldMark(editor)
-                        break
-                      }
-
-                      case isItalicHotkey(event): {
-                        event.preventDefault()
-                        CustomEditor.toggleItalicMark(editor)
-                        break
-                      }
-                    }
-                  }}
-                />
-              </Slate>
-            </TextEditor>
+             */}
+      <TextEditor>
+        <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+          <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            onKeyDown={event => onKeyDown(event, editor)}
+          />
+        </Slate>
+        <Slate editor={editor1} value={value1} onChange={value => setValue1(value)}>
+          <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            onKeyDown={event => onKeyDown(event, editor1)}
+          />
+        </Slate>
+      </TextEditor>
+      {/* 
           </Form>
         )
-      })}
+      })} */}
     </Container>
   )
 }
