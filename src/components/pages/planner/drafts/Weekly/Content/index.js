@@ -13,6 +13,12 @@ const Form = styled.div`
   border-right: 1px solid orange;
   text-align: center;
   width: 95%;
+
+  .title {
+    border-bottom: 1px solid orange;
+    margin: 0;
+    padding: 16px 0;
+  }
 `
 
 const Index = ({ editors, days, values, handleChange }) => {
@@ -21,7 +27,7 @@ const Index = ({ editors, days, values, handleChange }) => {
       {days.map((day, i) => {
         return (
           <Form key={`day${i}`}>
-            <p>{day}</p>
+            <p className="title">{day}</p>
             <Editor editor={editors[i]} value={values[i]} handleChange={handleChange} />
           </Form>
         )

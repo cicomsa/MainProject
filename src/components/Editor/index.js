@@ -1,17 +1,10 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { Transforms, Text, Editor } from 'slate'
 import { Slate, Editable } from 'slate-react'
 import isHotkey from 'is-hotkey'
 
-const TextEditor = styled.div`
-  border: 1px solid orange;
-  display: block;
-  height: 150px;
-  margin: auto;
-  width: 95%;
-`
 const CustomEditor = {
   isMarkActive(editor, mark) {
     const [match] = Editor.nodes(editor, {
@@ -43,8 +36,33 @@ const returnElement = (element, attributes, children) => {
       return <strong {...attributes}>{children}</strong>
     case 'italic':
       return <em {...attributes}>{children}</em>
+    case 'paragraph':
+      return <p {...attributes}>{children}</p>
     default:
       return <span {...attributes}>{children}</span>
+  }
+}
+
+const onKeyDown = (event, editor) => {
+  const isBoldHotkey = isHotkey('mod+b')
+  const isItalicHotkey = isHotkey('mod+i')
+  const isCodeBlockHotkey = isHotkey('`')
+
+  switch (true) {
+    case isCodeBlockHotkey(event): {
+      CustomEditor.toggleMark(editor, 'code')
+      break
+    }
+
+    case isBoldHotkey(event): {
+      CustomEditor.toggleMark(editor, 'bold')
+      break
+    }
+
+    case isItalicHotkey(event): {
+      CustomEditor.toggleMark(editor, 'italic')
+      break
+    }
   }
 }
 
@@ -54,10 +72,6 @@ const Leaf = props => {
 }
 
 const Index = ({ editor, value, handleChange }) => {
-  const isBoldHotkey = isHotkey('mod+b')
-  const isItalicHotkey = isHotkey('mod+i')
-  const isCodeBlockHotkey = isHotkey('`')
-
   const renderElement = useCallback(props => {
     const { attributes, children, element } = props
     return returnElement(element, attributes, children)
@@ -67,32 +81,10 @@ const Index = ({ editor, value, handleChange }) => {
     return <Leaf {...props} />
   }, [])
 
-  const onKeyDown = (event, editor) => {
-    switch (true) {
-      case isCodeBlockHotkey(event): {
-        event.preventDefault()
-        CustomEditor.toggleMark(editor, 'code')
-        break
-      }
-
-      case isBoldHotkey(event): {
-        event.preventDefault()
-        CustomEditor.toggleMark(editor, 'bold')
-        break
-      }
-
-      case isItalicHotkey(event): {
-        event.preventDefault()
-        CustomEditor.toggleMark(editor, 'italic')
-        break
-      }
-    }
-  }
-
   const changeValue = value => handleChange(value)
 
   return (
-    <TextEditor>
+    <>
       {editor && (
         <Slate editor={editor} value={value} onChange={changeValue}>
           <Editable
@@ -102,7 +94,7 @@ const Index = ({ editor, value, handleChange }) => {
           />
         </Slate>
       )}
-    </TextEditor>
+    </>
   )
 }
 
