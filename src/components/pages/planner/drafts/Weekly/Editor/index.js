@@ -91,15 +91,12 @@ const Index = ({ editor, value, handleChange }) => {
     }
   }
 
-  // const changeValue = value => handleChange(value)
-  // console.log(value)
-
-  if (editor) editor.children = value
+  const changeValue = value => handleChange(value)
 
   return (
     <TextEditor>
       {editor && (
-        <Slate editor={editor} value={value} onChange={value => handleChange(value)}>
+        <Slate editor={editor} value={value} onChange={changeValue}>
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}
