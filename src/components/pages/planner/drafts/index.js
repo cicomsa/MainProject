@@ -13,22 +13,35 @@ const Weeklies = styled.div`
   border-top: 1px solid orange;
 `
 
+const chunk = (array, size) => {
+  if (!array) return []
+  const firstChunk = array.slice(0, size)
+
+  if (!firstChunk.length) {
+    return array
+  }
+  return [firstChunk].concat(chunk(array.slice(size, array.length), size))
+}
+
 const Index = ({ category }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   const [weeklies, setWeeklies] = useState(1)
   const [content, setContent] = useState({})
   const [values, setValues] = useState([])
   let editors = {}
-  let editorValues = []
+  const editorValues = []
+  const listEditors = []
 
   const addWeek = () => setWeeklies(weeklies + 1)
   const removeWeek = () => setWeeklies(weeklies - 1)
 
   const handleChange = val => {
-    const newValues = values.map(v =>
-      v[0].id === val[0].id
-        ? [{ ...v[0], children: val[0].children, change: true }]
-        : v)
+    const newValues = values.map(vals =>
+      vals.map(v =>
+        v[0].id === val[0].id
+          ? [{ ...v[0], children: val[0].children, change: true }]
+          : v)
+    )
     setValues(newValues)
   }
 
@@ -36,9 +49,10 @@ const Index = ({ category }) => {
     for (let i = 0; i < weeklies * days.length; i++) {
       // editors[`editor${i + 1}`] = useMemo(() => withReact(createEditor()), [])
       editors[`editor${i + 1}`] = withReact(createEditor())
+      listEditors.push(editors[`editor${i + 1}`])
     }
 
-    const contents = { days: days, editors }
+    const contents = { days: days, editors: listEditors }
 
     for (let i = 0; i < weeklies; i++) {
       if (weeklies > 1 && i > 0) contents.days = contents.days.concat(days)
@@ -51,11 +65,20 @@ const Index = ({ category }) => {
         day: day,
         children: [{ text: '' }],
       }]
-      editorValues = [...editorValues, editorValue]
+      editorValues.push(editorValue)
     })
 
+    const daysLength = days.length
+
+    const chunckedDaysList = chunk(contents.days, days.length)
+    const chunckedEditorsList = chunk(contents.editors, days.length)
+    const chunckedEditorValuesList = chunk(editorValues, days.length)
+
+    contents.days = chunckedDaysList
+    contents.editors = chunckedEditorsList
+
     setContent(contents)
-    setValues(editorValues)
+    setValues(chunckedEditorValuesList)
   }, [weeklies])
 
   return (
@@ -75,9 +98,16 @@ const Index = ({ category }) => {
       {/weekly/.test(category) && (
         <>
           <Weeklies>
-            {content.days && content.days.length === weeklies * days.length && (
-              <Weekly content={content} values={values} handleChange={handleChange} />
+            {content.days && content.days.map(
+              (daysList, i) => {
+                return (
+                  content.days.length === weeklies && (
+                    <Weekly editors={content.editors[i]} days={daysList} values={values[i]} handleChange={handleChange} key={i} />
+                  )
+                )
+              }
             )}
+
           </Weeklies>
           <button onClick={addWeek}>+</button>
           {weeklies > 0 && <button onClick={removeWeek}>-</button>}

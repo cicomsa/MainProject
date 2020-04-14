@@ -15,16 +15,14 @@ const Form = styled.div`
   width: 150px;
 `
 
-const Index = ({ content, values, handleChange }) => {
-  const { editors, days } = content
-
+const Index = ({ editors, days, values, handleChange }) => {
   return (
     <Container>
       {days.map((day, i) => {
         return (
           <Form key={`day${i}`}>
             <p>{day}</p>
-            <Editor editor={editors[`editor${i + 1}`]} value={values[i]} handleChange={handleChange} />
+            <Editor editor={editors[i]} value={values[i]} handleChange={handleChange} />
           </Form>
         )
       })}
