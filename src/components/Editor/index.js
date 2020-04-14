@@ -39,6 +39,7 @@ const returnElement = (element, attributes, children) => {
     case 'paragraph':
       return <p {...attributes}>{children}</p>
     default:
+      // for Leaf component
       return <span {...attributes}>{children}</span>
   }
 }
