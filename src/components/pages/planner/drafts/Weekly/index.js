@@ -35,7 +35,7 @@ const Index = () => {
     const newValues = values.map(vals =>
       vals.map(v =>
         v[0].id === val[0].id
-          ? [{ ...v[0], children: val[0].children, change: true }]
+          ? val
           : v)
     )
     setValues(newValues)
