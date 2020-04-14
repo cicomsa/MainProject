@@ -6,13 +6,11 @@ import { Slate, Editable } from 'slate-react'
 import isHotkey from 'is-hotkey'
 
 const TextEditor = styled.div`
-  div[role="textbox"] {
-    border: 1px solid orange;
-    display: block;
-    height: 150px;
-    margin: auto;
-    width: 95%;
-  }
+  border: 1px solid orange;
+  display: block;
+  height: 150px;
+  margin: auto;
+  width: 95%;
 `
 const CustomEditor = {
   isMarkActive(editor, mark) {

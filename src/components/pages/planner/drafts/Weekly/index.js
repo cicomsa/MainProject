@@ -12,7 +12,7 @@ const Container = styled.div`
 const Form = styled.div`
   border-right: 1px solid orange;
   text-align: center;
-  width: 150px;
+  width: 95%;
 `
 
 const Index = ({ editors, days, values, handleChange }) => {
