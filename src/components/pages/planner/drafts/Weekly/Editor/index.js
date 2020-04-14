@@ -55,7 +55,7 @@ const Leaf = props => {
   return returnElement(leaf, attributes, children)
 }
 
-const Index = ({ editor, value, setValue }) => {
+const Index = ({ editor, value, handleChange }) => {
   const isBoldHotkey = isHotkey('mod+b')
   const isItalicHotkey = isHotkey('mod+i')
   const isCodeBlockHotkey = isHotkey('`')
@@ -91,12 +91,15 @@ const Index = ({ editor, value, setValue }) => {
     }
   }
 
+  // const changeValue = value => handleChange(value)
+  // console.log(value)
+
   if (editor) editor.children = value
 
   return (
     <TextEditor>
       {editor && (
-        <Slate editor={editor} value={value} onChange={value => setValue(value)}>
+        <Slate editor={editor} value={value} onChange={value => handleChange(value)}>
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}

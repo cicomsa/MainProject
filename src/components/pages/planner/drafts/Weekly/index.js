@@ -15,23 +15,16 @@ const Form = styled.div`
   width: 150px;
 `
 
-const Index = ({ content, weeklies }) => {
+const Index = ({ content, values, handleChange }) => {
   const { editors, days } = content
-
-  const [value, setValue] = useState([
-    {
-      type: 'paragraph',
-      children: [{ text: '' }],
-    }
-  ])
 
   return (
     <Container>
-      {days && days.map((day, i) => {
+      {days.map((day, i) => {
         return (
           <Form key={`day${i}`}>
             <p>{day}</p>
-            <Editor editor={editors[`editor${i + 1}`]} value={value} setValue={setValue} />
+            <Editor editor={editors[`editor${i + 1}`]} value={values[i]} handleChange={handleChange} />
           </Form>
         )
       })}

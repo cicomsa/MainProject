@@ -17,7 +17,20 @@ const Index = ({ category }) => {
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   const [weeklies, setWeeklies] = useState(1)
   const [content, setContent] = useState({})
+  const [values, setValues] = useState([])
   let editors = {}
+  let editorValues = []
+
+  const addWeek = () => setWeeklies(weeklies + 1)
+  const removeWeek = () => setWeeklies(weeklies - 1)
+
+  const handleChange = val => {
+    const newValues = values.map(v =>
+      v[0].id === val[0].id
+        ? [{ ...v[0], children: val[0].children, change: true }]
+        : v)
+    setValues(newValues)
+  }
 
   useEffect(() => {
     for (let i = 0; i < weeklies * days.length; i++) {
@@ -31,11 +44,19 @@ const Index = ({ category }) => {
       if (weeklies > 1 && i > 0) contents.days = contents.days.concat(days)
     }
 
-    setContent(contents)
-  }, [weeklies])
+    contents.days.forEach((day, i) => {
+      const editorValue = [{
+        id: i + 1,
+        type: 'paragraph',
+        day: day,
+        children: [{ text: '' }],
+      }]
+      editorValues = [...editorValues, editorValue]
+    })
 
-  const addWeek = () => setWeeklies(weeklies + 1)
-  const removeWeek = () => setWeeklies(weeklies - 1)
+    setContent(contents)
+    setValues(editorValues)
+  }, [weeklies])
 
   return (
     <>
@@ -54,7 +75,9 @@ const Index = ({ category }) => {
       {/weekly/.test(category) && (
         <>
           <Weeklies>
-            <Weekly content={content} weeklies={weeklies} />
+            {content.days && content.days.length === weeklies * days.length && (
+              <Weekly content={content} values={values} handleChange={handleChange} />
+            )}
           </Weeklies>
           <button onClick={addWeek}>+</button>
           {weeklies > 0 && <button onClick={removeWeek}>-</button>}
