@@ -94,7 +94,7 @@ const Index = ({ timePeriod }) => {
         )}
       </Container>
       <button onClick={addTimePeriod}>+</button>
-      {period > 0 && <button onClick={removeTimePeriod}>-</button>}
+      {period > 1 && <button onClick={removeTimePeriod}>-</button>}
     </>
   )
 }
