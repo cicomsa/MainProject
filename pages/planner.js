@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Planner from '../src/components/pages/planner'
-import planners from '../src/components/pages/planner/planners.json'
+import planners from '../src/components/pages/consts/planners.json'
 
 const Title = styled.h1`
   font-size: 50px;

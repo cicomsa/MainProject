@@ -4,26 +4,22 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import { createEditor } from 'slate'
 import { withReact } from 'slate-react'
-import Weekly from './Weekly'
+import Periods from './Periods'
+import planners from '../../consts/planners.json'
 
 const Links = styled.div`
   margin-bottom: 50px;
+
+  a {
+    margin-right: 5px;
+  }
 `
 const Weeklies = styled.div`
   border-top: 1px solid orange;
 `
 
-const chunk = (array, size) => {
-  if (!array) return []
-  const firstChunk = array.slice(0, size)
-
-  if (!firstChunk.length) {
-    return array
-  }
-  return [firstChunk].concat(chunk(array.slice(size, array.length), size))
-}
-
 const Index = ({ category }) => {
+  const { days, months, years, handles } = planners.drafts
   return (
     <>
       <Links>
@@ -32,13 +28,18 @@ const Index = ({ category }) => {
             <a>Drafts</a>
           </Link>
         )}
-        {!/weekly/.test(category) && (
-          <Link href='/planner/drafts/weekly'>
-            <a>Weekly</a>
-          </Link>
-        )}
+        {handles.map(handle => {
+          const testHandle = RegExp(handle)
+          return !testHandle.test(category) && (
+            <Link key={handle} href={`/planner/drafts/${handle.toLowerCase()}`}>
+              <a>{handle}</a>
+            </Link>
+          )
+        })}
       </Links>
-      {/weekly/.test(category) && <Weekly />}
+      {/weekly/.test(category) && <Periods timePeriod={days} />}
+      {/monthly/.test(category) && <Periods timePeriod={months} />}
+      {/yearly/.test(category) && <Periods timePeriod={years} />}
     </>
   )
 }
