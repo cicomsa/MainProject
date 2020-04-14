@@ -20,6 +20,8 @@ const Weeklies = styled.div`
 
 const Index = ({ category }) => {
   const { days, months, years, handles } = planners.drafts
+  const periods = [days, months, years]
+
   return (
     <>
       <Links>
@@ -29,7 +31,7 @@ const Index = ({ category }) => {
           </Link>
         )}
         {handles.map(handle => {
-          const testHandle = RegExp(handle)
+          const testHandle = RegExp(handle.toLowerCase())
           return !testHandle.test(category) && (
             <Link key={handle} href={`/planner/drafts/${handle.toLowerCase()}`}>
               <a>{handle}</a>
@@ -37,9 +39,12 @@ const Index = ({ category }) => {
           )
         })}
       </Links>
-      {/weekly/.test(category) && <Periods timePeriod={days} />}
-      {/monthly/.test(category) && <Periods timePeriod={months} />}
-      {/yearly/.test(category) && <Periods timePeriod={years} />}
+      {handles.map((handle, i) => {
+        const testHandle = RegExp(handle.toLowerCase())
+        return testHandle.test(category) && (
+          <Periods key={handle} timePeriod={periods[i]} />
+        )
+      })}
     </>
   )
 }
