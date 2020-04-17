@@ -19,8 +19,8 @@ const Weeklies = styled.div`
 `
 
 const Index = ({ category }) => {
-  const { days, months, years, handles } = planners.drafts
-  const periods = [days, months, years]
+  const { hours, days, months, years, handles } = planners.drafts
+  const periods = [hours, days, months, years]
 
   return (
     <>
@@ -39,6 +39,7 @@ const Index = ({ category }) => {
           )
         })}
       </Links>
+      {/* NOTE: handles and corresponding data must have the same order in planners.json: "Daily" - "hours", "Weekly" - "days", etc. */}
       {handles.map((handle, i) => {
         const testHandle = RegExp(handle.toLowerCase())
         return testHandle.test(category) && (
