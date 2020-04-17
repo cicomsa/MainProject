@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useCallback, useContext } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { Transforms, Text, Editor } from 'slate'
 import { Slate, Editable } from 'slate-react'
 import isHotkey from 'is-hotkey'
+import { HandleChangeContext } from '../pages/planner/drafts/Periods'
 
 const CustomEditor = {
   isMarkActive(editor, mark) {
@@ -72,7 +73,9 @@ const Leaf = props => {
   return returnElement(leaf, attributes, children)
 }
 
-const Index = ({ editor, value, handleChange }) => {
+const Index = ({ editor, value }) => {
+  const handleChange = useContext(HandleChangeContext)
+
   const renderElement = useCallback(props => {
     const { attributes, children, element } = props
     return returnElement(element, attributes, children)

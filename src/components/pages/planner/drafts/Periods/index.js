@@ -1,31 +1,73 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, createContext } from 'react'
 import styled from 'styled-components'
 import { createEditor } from 'slate'
 import { withReact } from 'slate-react'
 import Content from './Content'
-
+import { chunk } from '../../../helpers'
 
 const Container = styled.div`
   border-top: 1px solid orange;
 `
 
-const chunk = (array, size) => {
-  if (!array) return []
-  const firstChunk = array.slice(0, size)
-
-  if (!firstChunk.length) {
-    return array
-  }
-  return [firstChunk].concat(chunk(array.slice(size, array.length), size))
-}
-
-const Index = ({ timePeriod }) => {
+const setData = timePeriod => {
   const [period, setPeriod] = useState(1)
   const [content, setContent] = useState({})
   const [values, setValues] = useState([])
   let editors = {}
   const editorValues = []
   const listEditors = []
+
+  const setContentValues = () => {
+    // create editors
+    for (let i = 0; i < period * timePeriod.length; i++) {
+      // @todo - editors[`editor${i + 1}`] = useMemo(() => withReact(createEditor()), [])
+      editors[`editor${i + 1}`] = withReact(createEditor())
+      listEditors.push(editors[`editor${i + 1}`])
+    }
+
+    const contents = { periods: timePeriod, editors: listEditors }
+
+    // update contents periods data
+    for (let i = 0; i < period; i++) {
+      if (period > 1 && i > 0) contents.periods = contents.periods.concat(timePeriod)
+    }
+
+    // create editors children value
+    contents.periods.forEach((period, i) => {
+      const editorValue = [{
+        id: i + 1,
+        type: 'paragraph',
+        periodContent: period,
+        children: [{ text: '' }],
+      }]
+      editorValues.push(editorValue)
+    })
+
+    // chunk contents data per singular period duration
+    const periodsLength = timePeriod.length
+    const chunckedPeriodsList = chunk(contents.periods, periodsLength)
+    const chunckedEditorsList = chunk(contents.editors, periodsLength)
+    const chunckedEditorValuesList = chunk(editorValues, periodsLength)
+
+    // update contents data with chunked per singular period duration data
+    contents.periods = chunckedPeriodsList
+    contents.editors = chunckedEditorsList
+
+    setContent(contents)
+    setValues(chunckedEditorValuesList)
+  }
+
+  useEffect(() => {
+    setContentValues()
+  }, [period])
+
+  return [{ content, values, period }, setPeriod, setValues];
+};
+
+const HandleChangeContext = createContext()
+
+const Index = ({ timePeriod }) => {
+  const [{ content, values, period }, setPeriod, setValues] = setData(timePeriod)
 
   const addTimePeriod = () => setPeriod(period + 1)
   const removeTimePeriod = () => setPeriod(period - 1)
@@ -40,46 +82,6 @@ const Index = ({ timePeriod }) => {
     setValues(newValues)
   }
 
-  const setContentValues = () => {
-    for (let i = 0; i < period * timePeriod.length; i++) {
-      // editors[`editor${i + 1}`] = useMemo(() => withReact(createEditor()), [])
-      editors[`editor${i + 1}`] = withReact(createEditor())
-      listEditors.push(editors[`editor${i + 1}`])
-    }
-
-    const contents = { periods: timePeriod, editors: listEditors }
-
-    for (let i = 0; i < period; i++) {
-      if (period > 1 && i > 0) contents.periods = contents.periods.concat(timePeriod)
-    }
-
-    contents.periods.forEach((period, i) => {
-      const editorValue = [{
-        id: i + 1,
-        type: 'paragraph',
-        periodContent: period,
-        children: [{ text: '' }],
-      }]
-      editorValues.push(editorValue)
-    })
-
-    const periodsLength = timePeriod.length
-
-    const chunckedPeriodsList = chunk(contents.periods, periodsLength)
-    const chunckedEditorsList = chunk(contents.editors, periodsLength)
-    const chunckedEditorValuesList = chunk(editorValues, periodsLength)
-
-    contents.periods = chunckedPeriodsList
-    contents.editors = chunckedEditorsList
-
-    setContent(contents)
-    setValues(chunckedEditorValuesList)
-  }
-
-  useEffect(() => {
-    setContentValues()
-  }, [period])
-
   return (
     <>
       <Container>
@@ -87,7 +89,9 @@ const Index = ({ timePeriod }) => {
           (periodsList, i) => {
             return (
               content.periods.length === period && (
-                <Content editors={content.editors[i]} periods={periodsList} values={values[i]} handleChange={handleChange} key={i} />
+                <HandleChangeContext.Provider value={handleChange} key={`period${i + 1}`}>
+                  <Content editors={content.editors[i]} periods={periodsList} values={values[i]} />
+                </HandleChangeContext.Provider>
               )
             )
           }
@@ -100,3 +104,4 @@ const Index = ({ timePeriod }) => {
 }
 
 export default Index
+export { HandleChangeContext }
