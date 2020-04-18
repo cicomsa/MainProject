@@ -10,7 +10,7 @@ if (process.browser && window.__REDUX_DEVTOOLS_EXTENSION__) {
 const enhancer = compose(
   applyMiddleware(ReduxThunk),
   devTools
-);
+)
 
 let store
 
