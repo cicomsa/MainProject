@@ -1,7 +1,9 @@
-import React, { createContext } from 'react'
+import React, { createContext, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import Content from './Content'
 import { setData } from '../../../../../helpers/drafts-periods'
+import { addCopy } from '../../../../../actions'
 
 const Container = styled.div`
   border-top: 1px solid orange;
@@ -10,8 +12,8 @@ const Container = styled.div`
 const HandleChangeContext = createContext()
 
 const Index = ({ timePeriod }) => {
-  const [{ content, values, period }, setPeriod, setValues] = setData(timePeriod)
-
+  const dispatch = useDispatch()
+  const [{ content, values, period, savedValues }, setPeriod, setValues] = setData(timePeriod)
   const addTimePeriod = () => setPeriod(period + 1)
   const removeTimePeriod = () => setPeriod(period - 1)
 
@@ -22,7 +24,9 @@ const Index = ({ timePeriod }) => {
           ? val
           : v)
     )
+
     setValues(newValues)
+    dispatch(addCopy(newValues))
   }
 
   return (
@@ -33,7 +37,7 @@ const Index = ({ timePeriod }) => {
             return (
               content.periods.length === period && (
                 <HandleChangeContext.Provider value={handleChange} key={`period${i + 1}`}>
-                  <Content editors={content.editors[i]} periods={periodsList} values={values[i]} />
+                  <Content editors={content.editors[i]} periods={periodsList} values={savedValues.length ? savedValues[i] : values[i]} />
                 </HandleChangeContext.Provider>
               )
             )

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { createEditor } from 'slate'
 import { withReact } from 'slate-react'
 import { chunk } from './index'
+import { addCopy } from '../actions'
 
 const createEditors = (period, timePeriod) => {
   const listEditors = []
@@ -31,9 +33,12 @@ const createEditorValues = contents => {
 }
 
 const setData = timePeriod => {
+  const dispatch = useDispatch()
+  const savedValues = useSelector(state => state.weeklyDrafts)
   const [period, setPeriod] = useState(1)
   const [content, setContent] = useState({})
-  const [values, setValues] = useState([])
+  const initialValues = savedValues.length ? savedValues : []
+  const [values, setValues] = useState(initialValues)
 
   const setContentValues = () => {
     const editors = createEditors(period, timePeriod)
@@ -59,13 +64,14 @@ const setData = timePeriod => {
 
     setContent(contents)
     setValues(chunckedEditorValuesList)
+    dispatch(addCopy(chunckedEditorValuesList))
   }
 
   useEffect(() => {
     setContentValues()
   }, [period])
 
-  return [{ content, values, period }, setPeriod, setValues];
+  return [{ content, values, period, savedValues }, setPeriod, setValues]
 }
 
 export { setData }
