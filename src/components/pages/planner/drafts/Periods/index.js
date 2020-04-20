@@ -13,9 +13,10 @@ const HandleChangeContext = createContext()
 
 const Index = ({ timePeriod }) => {
   const dispatch = useDispatch()
-  const [{ content, values, period, savedValues }, setPeriod, setValues] = setData(timePeriod)
-  const addTimePeriod = () => setPeriod(period + 1)
-  const removeTimePeriod = () => setPeriod(period - 1)
+  const [{ content, values, period, savedValues }, action] = setData(timePeriod)
+
+  const addTimePeriod = () => action({ type: 'SET_PERIOD', payload: period + 1 })
+  const removeTimePeriod = () => action({ type: 'SET_PERIOD', payload: period - 1 })
 
   const handleChange = val => {
     const newValues = values.map(vals =>
@@ -25,7 +26,7 @@ const Index = ({ timePeriod }) => {
           : v)
     )
 
-    setValues(newValues)
+    action({ type: 'SET_VALUES', payload: newValues })
     dispatch(addCopy(newValues))
   }
 
@@ -34,10 +35,11 @@ const Index = ({ timePeriod }) => {
       <Container>
         {content.periods && content.periods.map(
           (periodsList, i) => {
+            const currentValues = savedValues.length ? savedValues[i] : values[i]
             return (
               content.periods.length === period && (
                 <HandleChangeContext.Provider value={handleChange} key={`period${i + 1}`}>
-                  <Content editors={content.editors[i]} periods={periodsList} values={savedValues.length ? savedValues[i] : values[i]} />
+                  <Content editors={content.editors[i]} periods={periodsList} values={currentValues} />
                 </HandleChangeContext.Provider>
               )
             )
