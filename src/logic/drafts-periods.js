@@ -15,20 +15,34 @@ const createEditors = timePeriod => {
   return listEditors
 }
 
-const createEditorValues = contents => {
-  const values = []
+const updateContentPeriods = (period, periods, timePeriod) => {
+  for (let i = 0; i < period; i++) {
+    if (period > 1 && i > 0)
+      periods = [...periods, ...timePeriod]
+  }
+
+  return periods
+}
+
+const createEditorValues = (contents, initialValues) => {
+  const valuesList = []
+  const children = []
+
+  initialValues && initialValues.map(vals =>
+    vals.map(v => children.push(v[0].children))
+  )
 
   contents.periods.forEach((period, i) => {
     const value = [{
       id: i + 1,
       type: 'paragraph',
       periodContent: period,
-      children: [{ text: '' }], // add correct value if not ''
+      children: children[i] ? children[i] : [{ text: '' }]
     }]
-    values.push(value)
+    valuesList.push(value)
   })
 
-  return values
+  return valuesList
 }
 
 const setContentValues = (
@@ -37,11 +51,9 @@ const setContentValues = (
   const contents = { periods: timePeriod, editors }
 
   // update contents periods data based on period value
-  for (let i = 0; i < period; i++) {
-    if (period > 1 && i > 0) contents.periods = [...contents.periods, ...timePeriod]
-  }
+  contents.periods = updateContentPeriods(period, contents.periods, timePeriod)
 
-  const editorValues = createEditorValues(contents)
+  const editorValues = createEditorValues(contents, values)
 
   // chunk contents data per singular period duration
   const periodsLength = timePeriod.length
@@ -90,13 +102,14 @@ const reducer = (state, { type, payload }) => {
 const setData = timePeriod => {
   const dispatch = useDispatch()
   const savedValues = useSelector(state => state.weeklyDrafts)
-  const initialValues = savedValues.length ? savedValues : []
   const [state, action] = useReducer(reducer, initialState)
   const { period, content, values, editors } = state
+  const initialValues = savedValues.length ? savedValues : values
 
   useEffect(() => {
     const editorsList = createEditors(timePeriod)
 
+    console.log('sav', initialValues)
     action({
       type: 'SET_INITIALS', payload: {
         period: period + 1,
@@ -107,7 +120,8 @@ const setData = timePeriod => {
   }, [])
 
   useEffect(() => {
-    setContentValues(timePeriod, period, content, values, editors, dispatch, action)
+    console.log('va', state)
+    setContentValues(timePeriod, period, content, initialValues, editors, dispatch, action)
   }, [period])
 
   return [{ content, values, period, savedValues, editors }, action]
