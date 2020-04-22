@@ -38,7 +38,7 @@ const setContentValues = (
 
   // update contents periods data based on period value
   for (let i = 0; i < period; i++) {
-    if (period > 1 && i > 0) contents.periods = contents.periods.concat(timePeriod)
+    if (period > 1 && i > 0) contents.periods = [...contents.periods, ...timePeriod]
   }
 
   const editorValues = createEditorValues(contents)
@@ -68,15 +68,18 @@ const initialState = {
 const reducer = (state, { type, payload }) => {
   switch (type) {
     case 'SET_INITIALS':
+    case 'REMOVE_PERIOD_DATA':
       return { ...state, ...payload }
+    case 'ADD_PERIOD_DATA':
+      return {
+        ...state,
+        period: payload.period,
+        editors: [...state.editors, ...payload.editors]
+      }
     case 'SET_CONTENT':
       return { ...state, content: payload }
-    case 'SET_EDITORS':
-      return { ...state, editors: [...state.editors, ...payload] }
     case 'REMOVE_EDITORS':
       return { ...state, editors: payload }
-    case 'SET_PERIOD':
-      return { ...state, period: payload }
     case 'SET_VALUES':
       return { ...state, values: payload }
     default:

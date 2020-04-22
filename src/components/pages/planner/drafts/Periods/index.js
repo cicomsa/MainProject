@@ -16,14 +16,13 @@ const Index = ({ timePeriod }) => {
   const [{ content, values, period, savedValues, editors }, action] = setData(timePeriod)
 
   const addTimePeriod = () => {
-    action({ type: 'SET_PERIOD', payload: period + 1 })
     const editorsList = createEditors(timePeriod)
-    action({ type: 'SET_EDITORS', payload: editorsList })
+    action({ type: 'ADD_PERIOD_DATA', payload: { period: period + 1, editors: editorsList } })
   }
+
   const removeTimePeriod = () => {
-    action({ type: 'SET_PERIOD', payload: period - 1 })
     const editorsList = editors.splice(7, timePeriod.length * period)
-    action({ type: 'REMOVE_EDITORS', payload: editorsList })
+    action({ type: 'REMOVE_PERIOD_DATA', payload: { period: period - 1, editors: editorsList } })
   }
 
   const handleChange = val => {
