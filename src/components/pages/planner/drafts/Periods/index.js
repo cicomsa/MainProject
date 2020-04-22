@@ -1,8 +1,8 @@
-import React, { createContext, useEffect } from 'react'
+import React, { createContext, useEffect, useReducer } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import Content from './Content'
-import { setData } from '../../../../../helpers/drafts-periods'
+import { setData, createEditors } from '../../../../../logic/drafts-periods'
 import { addCopy } from '../../../../../actions'
 
 const Container = styled.div`
@@ -13,10 +13,18 @@ const HandleChangeContext = createContext()
 
 const Index = ({ timePeriod }) => {
   const dispatch = useDispatch()
-  const [{ content, values, period, savedValues }, action] = setData(timePeriod)
+  const [{ content, values, period, savedValues, editors }, action] = setData(timePeriod)
 
-  const addTimePeriod = () => action({ type: 'SET_PERIOD', payload: period + 1 })
-  const removeTimePeriod = () => action({ type: 'SET_PERIOD', payload: period - 1 })
+  const addTimePeriod = () => {
+    action({ type: 'SET_PERIOD', payload: period + 1 })
+    const editorsList = createEditors(timePeriod)
+    action({ type: 'SET_EDITORS', payload: editorsList })
+  }
+  const removeTimePeriod = () => {
+    action({ type: 'SET_PERIOD', payload: period - 1 })
+    const editorsList = editors.splice(7, timePeriod.length * period)
+    action({ type: 'REMOVE_EDITORS', payload: editorsList })
+  }
 
   const handleChange = val => {
     const newValues = values.map(vals =>
@@ -33,7 +41,7 @@ const Index = ({ timePeriod }) => {
   return (
     <>
       <Container>
-        {content.periods && content.periods.map(
+        {content.editors && content.editors.length && content.periods && content.periods.map(
           (periodsList, i) => {
             const currentValues = savedValues.length ? savedValues[i] : values[i]
             return (

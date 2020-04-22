@@ -8,7 +8,7 @@ import {
   renderElement,
   CustomEditor,
   onKeyDown
-} from '../../helpers/editor'
+} from '../../logic/editor'
 
 const Index = ({ editor, value }) => {
   const handleChange = useContext(HandleChangeContext)
