@@ -5,7 +5,7 @@ import { withReact } from 'slate-react'
 import { chunk } from '../helpers'
 import { addCopy } from '../actions'
 
-const createEditors = timePeriod => {
+const createEditors = (timePeriod, period) => {
   const listEditors = []
 
   for (let i = 0; i < timePeriod.length; i++) {
@@ -51,7 +51,8 @@ const setContentValues = (
   const contents = { periods: timePeriod, editors }
 
   // update contents periods data based on period value
-  contents.periods = updateContentPeriods(period, contents.periods, timePeriod)
+  const length = period === 0 ? values.length : period
+  contents.periods = updateContentPeriods(length, contents.periods, timePeriod)
 
   const editorValues = createEditorValues(contents, values)
 
@@ -107,12 +108,16 @@ const setData = timePeriod => {
   const initialValues = savedValues.length ? savedValues : values
 
   useEffect(() => {
-    const editorsList = createEditors(timePeriod)
 
-    console.log('sav', initialValues)
+    let editorsList = []
+    // to rethink
+    for (let i = 0; i < initialValues.length; i++) {
+      const list = createEditors(timePeriod)
+      editorsList = editorsList.concat(list)
+    }
     action({
       type: 'SET_INITIALS', payload: {
-        period: period + 1,
+        period: initialValues.length,
         values: initialValues,
         editors: editorsList
       }
@@ -120,7 +125,6 @@ const setData = timePeriod => {
   }, [])
 
   useEffect(() => {
-    console.log('va', state)
     setContentValues(timePeriod, period, content, initialValues, editors, dispatch, action)
   }, [period])
 
