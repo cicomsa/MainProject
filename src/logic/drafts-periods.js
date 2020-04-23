@@ -5,6 +5,34 @@ import { withReact } from 'slate-react'
 import { chunk } from '../helpers'
 import { addCopy } from '../actions'
 
+const initialState = {
+  period: 0,
+  content: {},
+  values: [],
+  editors: []
+}
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case 'SET_INITIALS':
+    case 'REMOVE_PERIOD_DATA':
+    case 'SET_CONTENT_AND_VALUES':
+      return { ...state, ...payload }
+    case 'ADD_PERIOD_DATA':
+      return {
+        ...state,
+        period: payload.period,
+        editors: [...state.editors, ...payload.editors]
+      }
+    case 'REMOVE_EDITORS':
+      return { ...state, editors: payload }
+    case 'SET_VALUES':
+      return { ...state, values: payload }
+    default:
+      return initialState
+  }
+}
+
 const createEditors = (timePeriod, period) => {
   const listEditors = []
 
@@ -13,15 +41,6 @@ const createEditors = (timePeriod, period) => {
     listEditors.push(editor)
   }
   return listEditors
-}
-
-const updateContentPeriods = (period, periods, timePeriod) => {
-  for (let i = 0; i < period; i++) {
-    if (period > 1 && i > 0)
-      periods = [...periods, ...timePeriod]
-  }
-
-  return periods
 }
 
 const createEditorValues = (contents, initialValues) => {
@@ -43,6 +62,15 @@ const createEditorValues = (contents, initialValues) => {
   })
 
   return valuesList
+}
+
+const updateContentPeriods = (period, periods, timePeriod) => {
+  for (let i = 0; i < period; i++) {
+    if (period > 1 && i > 0)
+      periods = [...periods, ...timePeriod]
+  }
+
+  return periods
 }
 
 const setContentValues = (
@@ -73,34 +101,6 @@ const setContentValues = (
     }
   })
   dispatch(addCopy(chunckedEditorValuesList))
-}
-
-const initialState = {
-  period: 0,
-  content: {},
-  values: [],
-  editors: []
-}
-
-const reducer = (state, { type, payload }) => {
-  switch (type) {
-    case 'SET_INITIALS':
-    case 'REMOVE_PERIOD_DATA':
-    case 'SET_CONTENT_AND_VALUES':
-      return { ...state, ...payload }
-    case 'ADD_PERIOD_DATA':
-      return {
-        ...state,
-        period: payload.period,
-        editors: [...state.editors, ...payload.editors]
-      }
-    case 'REMOVE_EDITORS':
-      return { ...state, editors: payload }
-    case 'SET_VALUES':
-      return { ...state, values: payload }
-    default:
-      return initialState
-  }
 }
 
 const setData = timePeriod => {
