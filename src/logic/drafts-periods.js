@@ -102,19 +102,20 @@ const reducer = (state, { type, payload }) => {
 
 const setData = timePeriod => {
   const dispatch = useDispatch()
-  const savedValues = useSelector(state => state.weeklyDrafts)
   const [state, action] = useReducer(reducer, initialState)
   const { period, content, values, editors } = state
+  const savedValues = useSelector(state => state.weeklyDrafts)
   const initialValues = savedValues.length ? savedValues : values
 
+  // on initial state
   useEffect(() => {
-
     let editorsList = []
-    // to rethink
+
     for (let i = 0; i < initialValues.length; i++) {
       const list = createEditors(timePeriod)
-      editorsList = editorsList.concat(list)
+      editorsList = [...editorsList, ...list]
     }
+
     action({
       type: 'SET_INITIALS', payload: {
         period: initialValues.length,
@@ -124,6 +125,7 @@ const setData = timePeriod => {
     })
   }, [])
 
+  // on periods number change
   useEffect(() => {
     setContentValues(timePeriod, period, content, initialValues, editors, dispatch, action)
   }, [period])
