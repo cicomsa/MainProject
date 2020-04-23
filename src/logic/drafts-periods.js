@@ -66,8 +66,12 @@ const setContentValues = (
   contents.periods = chunckedPeriodsList
   contents.editors = chunckedEditorsList
 
-  action({ type: 'SET_CONTENT', payload: contents })
-  action({ type: 'SET_VALUES', payload: chunckedEditorValuesList })
+  action({
+    type: 'SET_CONTENT_AND_VALUES', payload: {
+      content: contents,
+      values: chunckedEditorValuesList
+    }
+  })
   dispatch(addCopy(chunckedEditorValuesList))
 }
 
@@ -82,6 +86,7 @@ const reducer = (state, { type, payload }) => {
   switch (type) {
     case 'SET_INITIALS':
     case 'REMOVE_PERIOD_DATA':
+    case 'SET_CONTENT_AND_VALUES':
       return { ...state, ...payload }
     case 'ADD_PERIOD_DATA':
       return {
@@ -89,8 +94,6 @@ const reducer = (state, { type, payload }) => {
         period: payload.period,
         editors: [...state.editors, ...payload.editors]
       }
-    case 'SET_CONTENT':
-      return { ...state, content: payload }
     case 'REMOVE_EDITORS':
       return { ...state, editors: payload }
     case 'SET_VALUES':
@@ -107,7 +110,7 @@ const setData = timePeriod => {
   const savedValues = useSelector(state => state.weeklyDrafts)
   const initialValues = savedValues.length ? savedValues : values
 
-  // on initial state
+  // on initial render only
   useEffect(() => {
     let editorsList = []
 
