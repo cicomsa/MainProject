@@ -36,10 +36,11 @@ const reducer = (state, { type, payload }) => {
 const createEditors = (timePeriod, period) => {
   const listEditors = []
 
-  for (let i = 0; i < timePeriod.length; i++) {
+  timePeriod.forEach(() => {
     const editor = withReact(createEditor())
     listEditors.push(editor)
-  }
+  })
+
   return listEditors
 }
 
@@ -114,10 +115,10 @@ const setData = timePeriod => {
   useEffect(() => {
     let editorsList = []
 
-    for (let i = 0; i < initialValues.length; i++) {
+    initialValues.forEach(() => {
       const list = createEditors(timePeriod)
       editorsList = [...editorsList, ...list]
-    }
+    })
 
     action({
       type: 'SET_INITIALS', payload: {
