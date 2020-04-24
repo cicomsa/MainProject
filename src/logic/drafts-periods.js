@@ -108,7 +108,7 @@ const setData = (timePeriod, category) => {
   const dispatch = useDispatch()
   const [state, action] = useReducer(reducer, initialState)
   const { period, content, values, editors } = state
-  const data = useSelector(state => state.weeklyDrafts)
+  const data = useSelector(state => state.drafts)
   const savedValues = data.values
   const initialValues = savedValues.length ? savedValues : values
 

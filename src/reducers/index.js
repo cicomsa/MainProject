@@ -1,5 +1,5 @@
-import weeklyDrafts from './weeklyDrafts'
+import drafts from './drafts'
 
 export default {
-  weeklyDrafts
+  drafts
 }
