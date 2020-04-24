@@ -75,7 +75,7 @@ const updateContentPeriods = (period, periods, timePeriod) => {
 }
 
 const setContentValues = (
-  timePeriod, period, content, values, editors, dispatch, action
+  timePeriod, period, content, values, editors, dispatch, action, category
 ) => {
   const contents = { periods: timePeriod, editors }
 
@@ -101,28 +101,33 @@ const setContentValues = (
       values: chunckedEditorValuesList
     }
   })
-  dispatch(addCopy(chunckedEditorValuesList))
+  dispatch(addCopy({ category, values: chunckedEditorValuesList }))
 }
 
-const setData = timePeriod => {
+const setData = (timePeriod, category) => {
   const dispatch = useDispatch()
   const [state, action] = useReducer(reducer, initialState)
   const { period, content, values, editors } = state
-  const savedValues = useSelector(state => state.weeklyDrafts)
+  const data = useSelector(state => state.weeklyDrafts)
+  const savedValues = data.values
   const initialValues = savedValues.length ? savedValues : values
 
   // on initial render only
   useEffect(() => {
     let editorsList = []
-
-    initialValues.forEach(() => {
+    if (initialValues.length) {
+      initialValues.forEach(() => {
+        const list = createEditors(timePeriod)
+        editorsList = [...editorsList, ...list]
+      })
+    } else {
       const list = createEditors(timePeriod)
       editorsList = [...editorsList, ...list]
-    })
+    }
 
     action({
       type: 'SET_INITIALS', payload: {
-        period: initialValues.length,
+        period: initialValues.length === 0 ? 1 : initialValues.length,
         values: initialValues,
         editors: editorsList
       }
@@ -131,7 +136,7 @@ const setData = timePeriod => {
 
   // on periods number change
   useEffect(() => {
-    setContentValues(timePeriod, period, content, initialValues, editors, dispatch, action)
+    setContentValues(timePeriod, period, content, initialValues, editors, dispatch, action, category)
   }, [period])
 
   return [{ content, values, period, savedValues, editors }, action]

@@ -2,8 +2,6 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
-import { createEditor } from 'slate'
-import { withReact } from 'slate-react'
 import Periods from './Periods'
 import planners from '../../consts/planners.json'
 
@@ -43,7 +41,7 @@ const Index = ({ category }) => {
       {handles.map((handle, i) => {
         const testHandle = RegExp(handle.toLowerCase())
         return testHandle.test(category) && (
-          <Periods key={handle} timePeriod={periods[i]} />
+          <Periods key={handle} category={handle.toLowerCase()} timePeriod={periods[i]} />
         )
       })}
     </>
