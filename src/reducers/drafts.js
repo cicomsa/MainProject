@@ -1,7 +1,7 @@
-const reducer = (state = {category: '', values: []}, { type, payload }) => {
+const reducer = (state = {}, { type, payload }) => {
   switch (type) {
     case "ADD_COPY":
-      return {...state, category: payload.category, values: payload.values}
+      return { ...state, ...payload }
     default:
       return state;
   }

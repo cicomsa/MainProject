@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
@@ -19,6 +20,7 @@ const Weeklies = styled.div`
 const Index = ({ category }) => {
   const { hours, days, months, years, handles } = planners.drafts
   const periods = [hours, days, months, years]
+  const values = useSelector(state => state.drafts)
 
   return (
     <>
@@ -41,7 +43,12 @@ const Index = ({ category }) => {
       {handles.map((handle, i) => {
         const testHandle = RegExp(handle.toLowerCase())
         return testHandle.test(category) && (
-          <Periods key={handle} category={handle.toLowerCase()} timePeriod={periods[i]} />
+          <Periods
+            key={handle}
+            category={handle.toLowerCase()}
+            timePeriod={periods[i]}
+            savedValues={Object.keys(values).length && values[handle.toLowerCase()] ? values[handle.toLowerCase()] : []}
+          />
         )
       })}
     </>

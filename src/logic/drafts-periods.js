@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { createEditor } from 'slate'
 import { withReact } from 'slate-react'
 import { chunk } from '../helpers'
@@ -101,15 +101,13 @@ const setContentValues = (
       values: chunckedEditorValuesList
     }
   })
-  dispatch(addCopy({ category, values: chunckedEditorValuesList }))
+  dispatch(addCopy({ [category]: chunckedEditorValuesList }))
 }
 
-const setData = (timePeriod, category) => {
+const setData = (timePeriod, category, savedValues) => {
   const dispatch = useDispatch()
   const [state, action] = useReducer(reducer, initialState)
   const { period, content, values, editors } = state
-  const data = useSelector(state => state.drafts)
-  const savedValues = data.values
   const initialValues = savedValues.length ? savedValues : values
 
   // on initial render only
