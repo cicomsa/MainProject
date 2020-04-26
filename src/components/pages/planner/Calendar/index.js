@@ -42,7 +42,7 @@ const Index = ({ category }) => {
       {handles.map((handle, i) => {
         const testHandle = RegExp(handle.toLowerCase())
         return testHandle.test(category) && (
-          <div>hi</div>
+          <div key={handle}>hi</div>
         )
       })}
     </>
