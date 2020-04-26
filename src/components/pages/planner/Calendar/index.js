@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import moment from 'moment'
 import planners from '../../consts/planners.json'
 import Periods from '../Drafts/Periods'
+import { setPeriods } from '../../../../logic/planner-periods'
 
 const Links = styled.div`
   margin-bottom: 50px;
@@ -20,22 +21,7 @@ const Weeklies = styled.div`
 // to refactor - Combine drafts and Calendar
 const Index = ({ category }) => {
   const { handles, drafts } = planners
-  const { hours, days, months, years } = drafts
-  const now = moment()
-  const hoursList = []
-  const daysList = []
-  const monthsList = []
-  const yearsList = []
-
-  const createPeriod = (list, period, format) =>
-    list.forEach((l, i) => period.push(now.add(i, 'days').format(format)))
-
-  createPeriod(hours, hoursList, 'dddd, MMMM Do YYYY')
-  createPeriod(days, daysList, 'MMMM Do YYYY')
-  createPeriod(months, monthsList, 'MMMM YYYY')
-  createPeriod(years, yearsList, 'YYYY')
-
-  const periods = [hoursList, daysList, monthsList, yearsList]
+  const periods = setPeriods(drafts)
   const values = useSelector(state => state.drafts)
 
   return (
@@ -59,6 +45,7 @@ const Index = ({ category }) => {
       {handles.map((handle, i) => {
         const testHandle = RegExp(handle.toLowerCase())
         return testHandle.test(category) && (
+          // <div>hi</div>
           <Periods
             key={handle}
             category={handle.toLowerCase()}
