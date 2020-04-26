@@ -1,7 +1,17 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Drafts from './drafts'
+import styled from 'styled-components'
+import Drafts from './Drafts'
+import Calendar from './Calendar'
+
+const Links = styled.div`
+  margin-bottom: 50px;
+
+  a {
+    margin-right: 5px;
+  }
+`
 
 const Index = () => {
   const router = useRouter()
@@ -14,17 +24,25 @@ const Index = () => {
           <a>Homepage</a>
         </Link>
       </div>
-      {handle && (
-        <Link href='/planner'>
-          <a>Main Planner</a>
-        </Link>
-      )}
-      {!/drafts/.test(handle) && (
-        <Link href='/planner/drafts'>
-          <a>Drafts</a>
-        </Link>
-      )}
+      <Links>
+        {handle && (
+          <Link href='/planner'>
+            <a>Main Planner</a>
+          </Link>
+        )}
+        {!/drafts/.test(handle) && (
+          <Link href='/planner/drafts'>
+            <a>Drafts</a>
+          </Link>
+        )}
+        {!/calendar/.test(handle) && (
+          <Link href='/planner/calendar'>
+            <a>Calendar</a>
+          </Link>
+        )}
+      </Links>
       {/drafts/.test(handle) && <Drafts category={category} />}
+      {/calendar/.test(handle) && <Calendar category={category} />}
     </>
   )
 }

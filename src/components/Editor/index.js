@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { Slate, Editable } from 'slate-react'
-import { HandleChangeContext } from '../pages/planner/drafts/Periods'
+import { HandleChangeContext } from '../pages/planner/Drafts/Periods'
 import {
   returnElement,
   renderElement,

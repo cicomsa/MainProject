@@ -1,11 +1,11 @@
 {
+  "handles": [
+    "Daily",
+    "Weekly",
+    "Monthly",
+    "Yearly"
+  ],
   "drafts": {
-    "handles": [
-      "Daily",
-      "Weekly",
-      "Monthly",
-      "Yearly"
-    ],
     "hours": [
       "01",
       "02",
