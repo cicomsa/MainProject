@@ -3,8 +3,8 @@ import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
+import Periods from './Periods'
 import planners from '../../consts/planners.json'
-import Periods from '../Drafts/Periods'
 import { setPeriods } from '../../../../logic/planner-periods'
 
 const Links = styled.div`
@@ -17,24 +17,24 @@ const Links = styled.div`
 const Weeklies = styled.div`
   border-top: 1px solid orange;
 `
-// to refactor - Combine drafts and Calendar
-const Index = ({ category }) => {
+
+const Index = ({ category, handleCategory }) => {
   const { handles, drafts } = planners
-  const periods = setPeriods(drafts)
+  const periods = setPeriods(drafts, handleCategory)
   const values = useSelector(state => state.drafts)
 
   return (
     <>
       <Links>
         {category && (
-          <Link href='/planner/calendar/'>
-            <a>Calendar</a>
+          <Link href={`/planner/${handleCategory}`}>
+            <a>{handleCategory}</a>
           </Link>
         )}
         {handles.map(handle => {
           const testHandle = RegExp(handle.toLowerCase())
           return !testHandle.test(category) && (
-            <Link key={handle} href={`/planner/calendar/${handle.toLowerCase()}`}>
+            <Link key={handle} href={`/planner/${handleCategory}/${handle.toLowerCase()}`}>
               <a>{handle}</a>
             </Link>
           )
@@ -44,7 +44,6 @@ const Index = ({ category }) => {
       {handles.map((handle, i) => {
         const testHandle = RegExp(handle.toLowerCase())
         return testHandle.test(category) && (
-          // <div>hi</div>
           <Periods
             key={handle}
             category={handle.toLowerCase()}

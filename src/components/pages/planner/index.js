@@ -2,8 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
-import Drafts from './Drafts'
-import Calendar from './Calendar'
+import Boiler from './Boiler'
 
 const Links = styled.div`
   margin-bottom: 50px;
@@ -41,8 +40,8 @@ const Index = () => {
           </Link>
         )}
       </Links>
-      {/drafts/.test(handle) && <Drafts category={category} />}
-      {/calendar/.test(handle) && <Calendar category={category} />}
+      {/drafts/.test(handle) && <Boiler category={category} handleCategory='drafts' />}
+      {/calendar/.test(handle) && <Boiler category={category} handleCategory='calendar' />}
     </>
   )
 }
