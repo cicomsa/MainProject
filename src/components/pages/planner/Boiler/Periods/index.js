@@ -7,6 +7,7 @@ import { addCopy } from '../../../../../actions'
 
 const Container = styled.div`
   border-top: 1px solid orange;
+  margin-top: 50px;
 `
 
 const HandleChangeContext = createContext()
