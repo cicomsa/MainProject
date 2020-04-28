@@ -11,12 +11,16 @@ const chunk = (array, size) => {
 const titleLink = link => `${link[0].toUpperCase()}${link.slice(1)}`
 
 const renderComponent = (
-  categories, category, handle, component, link = false
+  categories, category, handle, components, link = false
 ) => categories.map((c, i) => {
   const testHandle = RegExp(c)
-  return link
-    ? !testHandle.test(handle) && component(c, i)
-    : testHandle.test(handle) && component(c, i)
+  if (link) {
+    const Component = components(c, i).link.name
+    return !testHandle.test(handle) && <Component {...components(c, i).link.props} />
+  } else {
+    const Component = components(c, i).main.name
+    return testHandle.test(handle) && <Component {...components(c, i).main.props} />
+  }
 })
 
 export {
