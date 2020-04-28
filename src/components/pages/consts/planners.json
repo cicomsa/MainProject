@@ -1,9 +1,13 @@
 {
+  "categoriesPlanner": [
+    "calendar",
+    "drafts"
+  ],
   "handles": [
-    "Daily",
-    "Weekly",
-    "Monthly",
-    "Yearly"
+    "daily",
+    "weekly",
+    "monthly",
+    "yearly"
   ],
   "drafts": {
     "hours": [

@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
 import Boiler from './Boiler'
+import planners from '../consts/planners.json'
+import { titleLink } from '../../../helpers'
 
 const Links = styled.div`
   margin-bottom: 50px;
@@ -15,6 +17,7 @@ const Links = styled.div`
 const Index = () => {
   const router = useRouter()
   const { handle, category } = router.query
+  const { categoriesPlanner } = planners
 
   return (
     <>
@@ -29,19 +32,21 @@ const Index = () => {
             <a>Main Planner</a>
           </Link>
         )}
-        {!/drafts/.test(handle) && (
-          <Link href='/planner/drafts'>
-            <a>Drafts</a>
-          </Link>
-        )}
-        {!/calendar/.test(handle) && (
-          <Link href='/planner/calendar'>
-            <a>Calendar</a>
-          </Link>
-        )}
+        {categoriesPlanner.map(c => {
+          const testHandle = RegExp(c)
+          return !testHandle.test(handle) && (
+            <Link key={c} href={`/planner/${c}`}>
+              <a>{titleLink(c)}</a>
+            </Link>
+          )
+        })}
       </Links>
-      {/drafts/.test(handle) && <Boiler category={category} handleCategory='drafts' />}
-      {/calendar/.test(handle) && <Boiler category={category} handleCategory='calendar' />}
+      {categoriesPlanner.map(c => {
+        const testHandle = RegExp(c)
+        return testHandle.test(handle) && (
+          <Boiler key={c} category={category} handleCategory={c} />
+        )
+      })}
     </>
   )
 }
