@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-const setPeriods = drafts => {
+const setPeriods = (drafts, category) => {
   const { hours, days, months, years } = drafts
   const hoursList = []
   const daysList = []
@@ -18,7 +18,9 @@ const setPeriods = drafts => {
   createPeriod(months, monthsList, 'months', 'MMMM YYYY')
   createPeriod(years, yearsList, 'years', 'YYYY')
 
-  return [hoursList, daysList, monthsList, yearsList]
+  return category === 'drafts'
+    ? [hours, days, months, years]
+    : [hoursList, daysList, monthsList, yearsList]
 }
 
 export {

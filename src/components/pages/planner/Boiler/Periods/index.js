@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useReducer, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import Content from './Content'
-import { setData, createEditors } from '../../../../../logic/drafts-periods'
+import { setData, createEditors } from '../../../../../logic/periods'
 import { addCopy } from '../../../../../actions'
 
 const Container = styled.div`
@@ -25,13 +25,13 @@ const Index = ({ timePeriod, category, savedValues }) => {
     action({ type: 'REMOVE_PERIOD_DATA', payload: { period: period - 1, editors: editorsList } })
   }
 
-  // let timeout = null
-  // const saveValues = useCallback(values => {
-  //   clearTimeout(timeout);
-  //   timeout = setTimeout(() => {
-  //     dispatch(addCopy({ [category]: values }))
-  //   }, 2000);
-  // }, [])
+  let timeout = null
+  const saveValues = useCallback(values => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      dispatch(addCopy({ [category]: values }))
+    }, 2000);
+  }, [])
 
   const handleChange = val => {
     const newValues = values.map(vals =>
@@ -42,8 +42,8 @@ const Index = ({ timePeriod, category, savedValues }) => {
     )
 
     action({ type: 'SET_VALUES', payload: newValues })
-    // saveValues(newValues)
-    dispatch(addCopy({ [category]: values }))
+    saveValues(newValues)
+    // dispatch(addCopy({ [category]: values }))
   }
 
   return (

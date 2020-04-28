@@ -5,7 +5,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 import Periods from './Periods'
 import planners from '../../consts/planners.json'
-import { setPeriods } from '../../../../logic/planner-periods'
+import { setPeriods } from '../../../../logic/boiler'
 
 const Links = styled.div`
   margin-bottom: 50px;
@@ -22,17 +22,20 @@ const Index = ({ category, handleCategory }) => {
   const { handles, drafts } = planners
   const periods = setPeriods(drafts, handleCategory)
   const values = useSelector(state => state.drafts)
+  const categoryTitle = `${handleCategory[0].toUpperCase()}${handleCategory.slice(1)}`
 
   return (
     <>
       <Links>
         {category && (
           <Link href={`/planner/${handleCategory}`}>
-            <a>{handleCategory}</a>
+            <a>{categoryTitle}</a>
           </Link>
         )}
         {handles.map(handle => {
           const testHandle = RegExp(handle.toLowerCase())
+
+          console.log(handle.slice(1))
           return !testHandle.test(category) && (
             <Link key={handle} href={`/planner/${handleCategory}/${handle.toLowerCase()}`}>
               <a>{handle}</a>
