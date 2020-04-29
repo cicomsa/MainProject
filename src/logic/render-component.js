@@ -1,4 +1,7 @@
-import { regex, titleLink } from '../helpers'
+import { titleLink } from '../helpers'
+
+
+const regex = c => RegExp(c)
 
 const returnComponent = (components, condition, currentHandle, component, index) => {
   if (condition) {

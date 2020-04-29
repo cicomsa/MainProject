@@ -8,12 +8,9 @@ const chunk = (array, size) => {
   return [firstChunk].concat(chunk(array.slice(size, array.length), size))
 }
 
-const regex = c => RegExp(c)
-
 const titleLink = link => `${link[0].toUpperCase()}${link.slice(1)}`
 
 export {
   chunk,
-  titleLink,
-  regex
+  titleLink
 }

@@ -44,24 +44,29 @@ const Index = ({ timePeriod, category, savedValues, id }) => {
 
     action({ type: 'SET_VALUES', payload: newValues })
     saveValues(newValues)
-    // dispatch(addCopy({ [category]: values }))
+    // dispatch(addCopy({ [id]: { [category]: values } }))
   }
 
   return (
     <>
       <Container>
-        {content.editors && content.editors.length && content.periods.map(
-          (periodsList, i) => {
+        {content.editors && content.editors.length
+          ? content.periods.map((periodsList, i) => {
             const currentValues = savedValues.length ? savedValues[i] : values[i]
             return (
               content.periods.length === period && (
                 <HandleChangeContext.Provider value={handleChange} key={`period${i + 1}`}>
-                  <Content editors={content.editors[i]} periods={periodsList} values={currentValues} />
+                  <Content
+                    editors={content.editors[i]}
+                    periods={periodsList}
+                    values={currentValues}
+                  />
                 </HandleChangeContext.Provider>
               )
             )
-          }
-        )}
+          })
+          : <div>Loading...</div>
+        }
       </Container>
       <button onClick={addTimePeriod}>+</button>
       {period > 1 && <button onClick={removeTimePeriod}>-</button>}
