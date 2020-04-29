@@ -12,7 +12,7 @@ const Index = ({ category, handleCategory, id }) => {
   const periods = setPeriods(drafts, handleCategory)
   const savedValues = useSelector(state => state.drafts)
   const values = savedValues[id]
-  const newIndex = Object.keys(savedValues).length + 1
+  const ids = []
 
   const components = (c, i) => ({
     main: {
@@ -35,6 +35,25 @@ const Index = ({ category, handleCategory, id }) => {
     }
   })
 
+  const idsLinks = (c, i) => ({
+    link: {
+      name: LinkComponent,
+      props: {
+        href: `/planner/${handleCategory}/${category}/${i + 1}`,
+        title: `${titleLink(category)} ${i + 1}`,
+        key: c
+      }
+    }
+  })
+
+  Object.keys(savedValues).map(key => {
+    if (savedValues[key][category]) {
+      ids.push(key)
+    }
+  })
+
+  const newIndex = ids.length + 1
+
   return (
     <>
       <Links>
@@ -47,23 +66,16 @@ const Index = ({ category, handleCategory, id }) => {
         {renderComponent(handles, category, category, components, true)}
       </Links>
       <Links>
-        {/* to do - show the list of drafts */}
-        {category && (
-          <LinkComponent
-            href={`/planner/${handleCategory}/${category}/1`}
-            title={`Draft 1`}
-          />
-        )}
+        {category && renderComponent(ids, category, id, idsLinks, true)}
       </Links>
       <Links>
         {category && (
           <LinkComponent
             href={`/planner/${handleCategory}/${category}/${newIndex}`}
-            title='New draft'
+            title={`New ${category}`}
           />
         )}
       </Links>
-      {/* <button onClick={() => console.log('j')}>New draft</button> */}
       {/* NOTE: handles and corresponding data must have the same order in planners.json:
       "Daily" - "hours", "Weekly" - "days", etc. */}
       {id && renderComponent(handles, category, category, components)}
