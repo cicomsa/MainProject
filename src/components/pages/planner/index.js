@@ -7,16 +7,17 @@ import { titleLink, renderComponent } from '../../../helpers'
 
 const Index = () => {
   const router = useRouter()
-  const { handle, category } = router.query
+  const { handle, category, id } = router.query
   const { categoriesPlanner } = planners
 
   const components = c => ({
     main: {
       name: Boiler,
       props: {
-        category: category,
+        category,
         handleCategory: c,
-        key: c
+        key: c,
+        id
       }
     },
     link: {

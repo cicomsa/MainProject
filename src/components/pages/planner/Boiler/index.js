@@ -7,10 +7,12 @@ import planners from '../../consts/planners.json'
 import { setPeriods } from '../../../../logic/boiler'
 import { titleLink, renderComponent } from '../../../../helpers'
 
-const Index = ({ category, handleCategory }) => {
+const Index = ({ category, handleCategory, id }) => {
   const { handles, drafts } = planners
   const periods = setPeriods(drafts, handleCategory)
-  const values = useSelector(state => state.drafts)
+  const savedValues = useSelector(state => state.drafts)
+  const values = savedValues[id]
+  const newIndex = Object.keys(savedValues).length + 1
 
   const components = (c, i) => ({
     main: {
@@ -18,8 +20,9 @@ const Index = ({ category, handleCategory }) => {
       props: {
         category: c,
         timePeriod: periods[i],
-        savedValues: Object.keys(values).length && values[c] ? values[c] : [],
-        key: c
+        savedValues: values && Object.keys(values).length && values[c] ? values[c] : [],
+        key: c,
+        id
       }
     },
     link: {
@@ -43,9 +46,27 @@ const Index = ({ category, handleCategory }) => {
         )}
         {renderComponent(handles, category, category, components, true)}
       </Links>
+      <Links>
+        {/* to do - show the list of drafts */}
+        {category && (
+          <LinkComponent
+            href={`/planner/${handleCategory}/${category}/1`}
+            title={`Draft 1`}
+          />
+        )}
+      </Links>
+      <Links>
+        {category && (
+          <LinkComponent
+            href={`/planner/${handleCategory}/${category}/${newIndex}`}
+            title='New draft'
+          />
+        )}
+      </Links>
+      {/* <button onClick={() => console.log('j')}>New draft</button> */}
       {/* NOTE: handles and corresponding data must have the same order in planners.json:
       "Daily" - "hours", "Weekly" - "days", etc. */}
-      {renderComponent(handles, category, category, components)}
+      {id && renderComponent(handles, category, category, components)}
     </>
   )
 }

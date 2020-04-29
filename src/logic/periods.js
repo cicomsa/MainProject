@@ -75,7 +75,7 @@ const updateContentPeriods = (period, periods, timePeriod) => {
 }
 
 const setContentValues = (
-  timePeriod, period, content, values, editors, dispatch, action, category
+  timePeriod, period, content, values, editors, dispatch, action, category, id
 ) => {
   const contents = { periods: timePeriod, editors }
 
@@ -101,10 +101,10 @@ const setContentValues = (
       values: chunckedEditorValuesList
     }
   })
-  dispatch(addCopy({ [category]: chunckedEditorValuesList }))
+  dispatch(addCopy({ [id]: { [category]: chunckedEditorValuesList } }))
 }
 
-const setData = (timePeriod, category, savedValues) => {
+const setData = (timePeriod, category, savedValues, id) => {
   const dispatch = useDispatch()
   const [state, action] = useReducer(reducer, initialState)
   const { period, content, values, editors } = state
@@ -134,7 +134,7 @@ const setData = (timePeriod, category, savedValues) => {
 
   // on periods number change
   useEffect(() => {
-    setContentValues(timePeriod, period, content, initialValues, editors, dispatch, action, category)
+    setContentValues(timePeriod, period, content, initialValues, editors, dispatch, action, category, id)
   }, [period])
 
   return [{ content, values, period, savedValues, editors }, action]

@@ -12,9 +12,9 @@ const Container = styled.div`
 
 const HandleChangeContext = createContext()
 
-const Index = ({ timePeriod, category, savedValues }) => {
+const Index = ({ timePeriod, category, savedValues, id }) => {
   const dispatch = useDispatch()
-  const [{ content, values, period, editors }, action] = setData(timePeriod, category, savedValues)
+  const [{ content, values, period, editors }, action] = setData(timePeriod, category, savedValues, id)
 
   const addTimePeriod = () => {
     const editorsList = createEditors(timePeriod)
@@ -30,7 +30,7 @@ const Index = ({ timePeriod, category, savedValues }) => {
   const saveValues = useCallback(values => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
-      dispatch(addCopy({ [category]: values }))
+      dispatch(addCopy({ [id]: { [category]: values } }))
     }, 2000);
   }, [])
 
