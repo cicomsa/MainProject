@@ -19,25 +19,33 @@ const returnComponent = (components, condition, currentHandle, component, index)
   }
 }
 
+const renderLink = (categories, components, handle) => {
+  return categories.map((c, i) => {
+    const testHandle = regex(c)
+    const component = returnComponent(components, !testHandle.test(handle), c, 'link', i)
+
+    return component
+  })
+}
+
+const renderMain = (handle, categories, category, components) => {
+  if (handle) {
+    const currentHandle = categories.find(category => category === handle)
+    const index = categories.indexOf(currentHandle)
+    const testHandle = regex(currentHandle)
+    const component = returnComponent(components, testHandle.test(handle), currentHandle, 'main', index)
+
+    return component
+  }
+}
+
 const renderComponent = (
   categories, category, handle, components, link = false
 ) => {
   if (link) {
-    return categories.map((c, i) => {
-      const testHandle = regex(c)
-      const component = returnComponent(components, !testHandle.test(handle), c, 'link', i)
-
-      return component
-    })
+    return renderLink(categories, components, handle)
   } else {
-    if (handle) {
-      const currentHandle = categories.find(category => category === handle)
-      const index = categories.indexOf(currentHandle)
-      const testHandle = regex(currentHandle)
-      const component = returnComponent(components, testHandle.test(handle), currentHandle, 'main', index)
-
-      return component
-    }
+    return renderMain(handle, categories, category, components)
   }
 }
 
