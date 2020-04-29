@@ -3,7 +3,8 @@ import { useRouter } from 'next/router'
 import Boiler from './Boiler'
 import { Links, LinkComponent } from '../../Links'
 import planners from '../consts/planners.json'
-import { titleLink, renderComponent } from '../../../helpers'
+import { titleLink } from '../../../helpers'
+import { renderComponent } from '../../../logic/render-component'
 
 const Index = () => {
   const router = useRouter()

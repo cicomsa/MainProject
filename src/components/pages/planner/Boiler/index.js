@@ -5,7 +5,8 @@ import Periods from './Periods'
 import { Links, LinkComponent } from '../../../Links'
 import planners from '../../consts/planners.json'
 import { setPeriods } from '../../../../logic/boiler'
-import { titleLink, renderComponent } from '../../../../helpers'
+import { titleLink } from '../../../../helpers'
+import { renderComponent } from '../../../../logic/render-component'
 
 const Index = ({ category, handleCategory, id }) => {
   const { handles, drafts } = planners
