@@ -1,10 +1,10 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import Boiler from './Boiler'
-import { Links, LinkComponent } from '../../Links'
-import planners from '../consts/planners.json'
-import { titleLink } from '../../../helpers'
-import { renderComponent } from '../../../logic/render-component'
+import { Links, LinkComponent } from '@components/Links'
+import planners from '@consts/planners.json'
+import { titleLink } from '@helpers'
+import { renderComponent } from '@logic/render-component'
 
 const Index = () => {
   const router = useRouter()

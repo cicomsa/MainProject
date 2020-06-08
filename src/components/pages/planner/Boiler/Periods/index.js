@@ -2,8 +2,8 @@ import React, { createContext, useEffect, useReducer, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import Content from './Content'
-import { setData, createEditors } from '../../../../../logic/periods'
-import { addCopy } from '../../../../../actions'
+import { setData, createEditors } from '@logic/periods'
+import { addCopy } from '@actions'
 
 const Container = styled.div`
   border-top: 1px solid orange;

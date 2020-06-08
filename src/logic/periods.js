@@ -2,8 +2,8 @@ import { useEffect, useReducer } from 'react'
 import { useDispatch } from 'react-redux'
 import { createEditor } from 'slate'
 import { withReact } from 'slate-react'
-import { chunk } from '../helpers'
-import { addCopy } from '../actions'
+import { chunk } from '@helpers'
+import { addCopy } from '@actions'
 
 const initialState = {
   period: 0,

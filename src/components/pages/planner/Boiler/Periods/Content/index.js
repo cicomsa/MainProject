@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
-import Editor from '../../../../../Editor'
+import Editor from '@components/Editor'
 
 const Container = styled.div`
   border-bottom: 1px solid orange;

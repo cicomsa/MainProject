@@ -2,18 +2,18 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import Periods from './Periods'
-import { Links, LinkComponent } from '../../../Links'
-import planners from '../../consts/planners.json'
-import { setPeriods } from '../../../../logic/boiler'
-import { titleLink } from '../../../../helpers'
-import { renderComponent } from '../../../../logic/render-component'
+import { Links, LinkComponent } from '@components/Links'
+import planners from '@consts/planners.json'
+import { setPeriods } from '@logic/boiler'
+import { titleLink } from '@helpers'
+import { renderComponent } from '@logic/render-component'
 
 const Index = ({ category, handleCategory, id }) => {
   const { handles, drafts } = planners
   const periods = setPeriods(drafts, handleCategory)
   const values = useSelector(state => state.drafts)
   const ids = []
-
+  console.log(values)
   const components = (c, i) => ({
     main: {
       name: Periods,
