@@ -12,7 +12,8 @@ const Index = ({ category, handleCategory, id }) => {
   const { handles, drafts } = planners
   const periods = setPeriods(drafts, handleCategory)
   const savedValues = useSelector(state => state.drafts)
-  const values = savedValues[id]
+  // const values = savedValues[id] // this line breaks the editor's offset!!!
+  const values = useSelector(state => state.drafts)
   const ids = []
 
   const components = (c, i) => ({
