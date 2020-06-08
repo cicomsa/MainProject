@@ -52,6 +52,7 @@ const Index = ({ category, handleCategory, id }) => {
   })
 
   Object.keys(savedValues).map(key => {
+    console.log(savedValues)
     if (savedValues[key][category]) {
       ids.push(key)
     }
@@ -73,16 +74,6 @@ const Index = ({ category, handleCategory, id }) => {
       <Links>
         {category && renderComponent(ids, category, id, idsLinks, true)}
       </Links>
-      {ids.filter(item => item == id).map(i => {
-        <Links>
-          {category && (
-            <LinkComponent
-              href={`/planner/${handleCategory}/${category}/${i}`}
-              title={`${category} ${i}`}
-            />
-          )}
-        </Links>
-      })}
 
       <Links>
         {category && (
