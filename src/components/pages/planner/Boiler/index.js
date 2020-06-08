@@ -11,8 +11,6 @@ import { renderComponent } from '../../../../logic/render-component'
 const Index = ({ category, handleCategory, id }) => {
   const { handles, drafts } = planners
   const periods = setPeriods(drafts, handleCategory)
-  const savedValues = useSelector(state => state.drafts)
-  // const values = savedValues[id] // this line breaks the editor's offset!!!
   const values = useSelector(state => state.drafts)
   const ids = []
 
@@ -23,8 +21,8 @@ const Index = ({ category, handleCategory, id }) => {
         category: c,
         timePeriod: periods[i],
         savedValues:
-          values && Object.keys(values).length && values[c]
-            ? values[c]
+          values && Object.keys(values).length && values[id][c]
+            ? values[id][c]
             : [],
         key: c,
         id
@@ -51,9 +49,8 @@ const Index = ({ category, handleCategory, id }) => {
     }
   })
 
-  Object.keys(savedValues).map(key => {
-    console.log(savedValues)
-    if (savedValues[key][category]) {
+  Object.keys(values).map(key => {
+    if (values[key][category]) {
       ids.push(key)
     }
   })
@@ -74,7 +71,6 @@ const Index = ({ category, handleCategory, id }) => {
       <Links>
         {category && renderComponent(ids, category, id, idsLinks, true)}
       </Links>
-
       <Links>
         {category && (
           <LinkComponent

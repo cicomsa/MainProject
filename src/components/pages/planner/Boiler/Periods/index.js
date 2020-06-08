@@ -27,12 +27,12 @@ const Index = ({ timePeriod, category, savedValues, id }) => {
   }
 
   let timeout = null
-  const saveValues = useCallback(values => {
+  const saveValues = values => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       dispatch(addCopy({ [id]: { [category]: values } }))
-    }, 2000);
-  }, [])
+    }, 0);
+  }
 
   const handleChange = val => {
     const newValues = values.map(vals =>
@@ -43,8 +43,8 @@ const Index = ({ timePeriod, category, savedValues, id }) => {
     )
 
     action({ type: 'SET_VALUES', payload: newValues })
-    saveValues(newValues)
-    // dispatch(addCopy({ [id]: { [category]: values } }))
+    // saveValues(newValues)
+    dispatch(addCopy({ [id]: { [category]: newValues } }))
   }
 
   return (
