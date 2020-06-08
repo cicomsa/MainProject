@@ -21,7 +21,10 @@ const Index = ({ category, handleCategory, id }) => {
       props: {
         category: c,
         timePeriod: periods[i],
-        savedValues: values && Object.keys(values).length && values[c] ? values[c] : [],
+        savedValues:
+          values && Object.keys(values).length && values[c]
+            ? values[c]
+            : [],
         key: c,
         id
       }
@@ -69,6 +72,17 @@ const Index = ({ category, handleCategory, id }) => {
       <Links>
         {category && renderComponent(ids, category, id, idsLinks, true)}
       </Links>
+      {ids.filter(item => item == id).map(i => {
+        <Links>
+          {category && (
+            <LinkComponent
+              href={`/planner/${handleCategory}/${category}/${i}`}
+              title={`${category} ${i}`}
+            />
+          )}
+        </Links>
+      })}
+
       <Links>
         {category && (
           <LinkComponent
