@@ -108,6 +108,7 @@ const setData = (timePeriod, category, savedValues, id) => {
   const dispatch = useDispatch()
   const [state, action] = useReducer(reducer, initialState)
   const { period, content, values, editors } = state
+  // todo - if no delayed auto-saved implemented, to keep only the redux version of the values (aka savedValues)
   const initialValues = savedValues.length ? savedValues : values
 
   // on initial render only

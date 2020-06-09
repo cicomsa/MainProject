@@ -9,7 +9,7 @@ const setPeriods = (drafts, category) => {
 
   const createPeriod = (list, periodList, period, format) =>
     list.forEach((l, i) => {
-      const now = moment()
+      const now = moment() // todo - to decide starting point
       periodList.push(now.add(i, period).format(format))
     })
 
