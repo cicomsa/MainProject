@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import styled from 'styled-components'
+import { titleLink } from '@helpers'
 
 const Links = styled.div`
   a {
@@ -16,4 +17,14 @@ const LinkComponent = ({ href, title }) => {
   )
 }
 
-export { Links, LinkComponent }
+const link = (href, category, c, i) =>
+  ({
+    name: LinkComponent,
+    props: {
+      href: `/planner/${href}`,
+      title: isNaN(c) ? titleLink(c) : `${titleLink(category)} ${i + 1}`,
+      key: c
+    }
+  })
+
+export { Links, LinkComponent, link }

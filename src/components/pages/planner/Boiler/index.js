@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/router'
 import Periods from './Periods'
-import { Links, LinkComponent } from '@components/Links'
+import { Links, LinkComponent, link } from '@components/Links'
 import planners from '@consts/planners.json'
 import { setPeriods } from '@logic/boiler'
-import { titleLink, linkComponent } from '@helpers'
+import { titleLink } from '@helpers'
 import { renderComponent } from '@logic/render-component'
 
 const Index = ({ category, handleCategory, id }) => {
@@ -16,7 +16,7 @@ const Index = ({ category, handleCategory, id }) => {
 
   const components = (c, type, i) =>
     type === 'link'
-      ? linkComponent(`${handleCategory}/${c}`, c, c)
+      ? link(`${handleCategory}/${c}`, c, c)
       : ({
         name: Periods,
         props: {
@@ -32,7 +32,7 @@ const Index = ({ category, handleCategory, id }) => {
       })
 
   const idsLinks = (c, type, i) =>
-    linkComponent(`${handleCategory}/${category}/${i + 1}`, category, c, i)
+    link(`${handleCategory}/${category}/${i + 1}`, category, c, i)
 
   Object.keys(values).map(key => {
     if (values[key][category]) {
