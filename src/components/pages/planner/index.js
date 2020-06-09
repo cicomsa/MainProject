@@ -11,8 +11,16 @@ const Index = () => {
   const { handle, category, id } = router.query
   const { categoriesPlanner } = planners
 
-  const components = c => ({
-    main: {
+  const components = (c, type) =>
+    type === 'link' ? ({
+      name: LinkComponent,
+      props: {
+        href: `/planner/${c}`,
+        title: titleLink(c),
+        key: c
+      }
+
+    }) : ({
       name: Boiler,
       props: {
         category,
@@ -20,16 +28,7 @@ const Index = () => {
         key: c,
         id
       }
-    },
-    link: {
-      name: LinkComponent,
-      props: {
-        href: `/planner/${c}`,
-        title: titleLink(c),
-        key: c
-      }
-    }
-  })
+    })
 
   return (
     <>

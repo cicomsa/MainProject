@@ -1,12 +1,12 @@
 import { titleLink } from '../helpers'
 
-
 const regex = c => RegExp(c)
 
 const returnComponent = (components, condition, currentHandle, component, index) => {
   if (condition) {
-    const Component = components(currentHandle, index)[component].name
-    return <Component {...components(currentHandle, index)[component].props} />
+    const Component = components(currentHandle, component, index).name
+
+    return <Component {...components(currentHandle, component, index).props} />
   }
 }
 

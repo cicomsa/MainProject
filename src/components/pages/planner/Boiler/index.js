@@ -13,9 +13,16 @@ const Index = ({ category, handleCategory, id }) => {
   const periods = setPeriods(drafts, handleCategory)
   const values = useSelector(state => state.drafts)
   const ids = []
-  console.log(values)
-  const components = (c, i) => ({
-    main: {
+
+  const components = (c, type, i) =>
+    type === 'link' ? ({
+      name: LinkComponent,
+      props: {
+        href: `/planner/${handleCategory}/${c}`,
+        title: titleLink(c),
+        key: c
+      }
+    }) : ({
       name: Periods,
       props: {
         category: c,
@@ -27,25 +34,15 @@ const Index = ({ category, handleCategory, id }) => {
         key: c,
         id
       }
-    },
-    link: {
-      name: LinkComponent,
-      props: {
-        href: `/planner/${handleCategory}/${c}`,
-        title: titleLink(c),
-        key: c
-      }
-    }
-  })
+    })
 
-  const idsLinks = (c, i) => ({
-    link: {
-      name: LinkComponent,
-      props: {
-        href: `/planner/${handleCategory}/${category}/${i + 1}`,
-        title: `${titleLink(category)} ${i + 1}`,
-        key: c
-      }
+
+  const idsLinks = (c, type, i) => ({
+    name: LinkComponent,
+    props: {
+      href: `/planner/${handleCategory}/${category}/${i + 1}`,
+      title: `${titleLink(category)} ${i + 1}`,
+      key: c
     }
   })
 
