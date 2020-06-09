@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Boiler from './Boiler'
 import { Links, LinkComponent } from '@components/Links'
 import planners from '@consts/planners.json'
-import { titleLink } from '@helpers'
+import { linkComponent } from '@helpers'
 import { renderComponent } from '@logic/render-component'
 
 const Index = () => {
@@ -12,23 +12,17 @@ const Index = () => {
   const { categoriesPlanner } = planners
 
   const components = (c, type) =>
-    type === 'link' ? ({
-      name: LinkComponent,
-      props: {
-        href: `/planner/${c}`,
-        title: titleLink(c),
-        key: c
-      }
-
-    }) : ({
-      name: Boiler,
-      props: {
-        category,
-        handleCategory: c,
-        key: c,
-        id
-      }
-    })
+    type === 'link'
+      ? linkComponent(c, c, c)
+      : ({
+        name: Boiler,
+        props: {
+          category,
+          handleCategory: c,
+          key: c,
+          id
+        }
+      })
 
   return (
     <>

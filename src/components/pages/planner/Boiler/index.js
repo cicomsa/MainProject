@@ -5,7 +5,7 @@ import Periods from './Periods'
 import { Links, LinkComponent } from '@components/Links'
 import planners from '@consts/planners.json'
 import { setPeriods } from '@logic/boiler'
-import { titleLink } from '@helpers'
+import { titleLink, linkComponent } from '@helpers'
 import { renderComponent } from '@logic/render-component'
 
 const Index = ({ category, handleCategory, id }) => {
@@ -15,36 +15,24 @@ const Index = ({ category, handleCategory, id }) => {
   const ids = []
 
   const components = (c, type, i) =>
-    type === 'link' ? ({
-      name: LinkComponent,
-      props: {
-        href: `/planner/${handleCategory}/${c}`,
-        title: titleLink(c),
-        key: c
-      }
-    }) : ({
-      name: Periods,
-      props: {
-        category: c,
-        timePeriod: periods[i],
-        savedValues:
-          values && Object.keys(values).length && values[id][c]
-            ? values[id][c]
-            : [],
-        key: c,
-        id
-      }
-    })
+    type === 'link'
+      ? linkComponent(`${handleCategory}/${c}`, c, c)
+      : ({
+        name: Periods,
+        props: {
+          category: c,
+          timePeriod: periods[i],
+          savedValues:
+            values && Object.keys(values).length && values[id][c]
+              ? values[id][c]
+              : [],
+          key: c,
+          id
+        }
+      })
 
-
-  const idsLinks = (c, type, i) => ({
-    name: LinkComponent,
-    props: {
-      href: `/planner/${handleCategory}/${category}/${i + 1}`,
-      title: `${titleLink(category)} ${i + 1}`,
-      key: c
-    }
-  })
+  const idsLinks = (c, type, i) =>
+    linkComponent(`${handleCategory}/${category}/${i + 1}`, category, c, i)
 
   Object.keys(values).map(key => {
     if (values[key][category]) {

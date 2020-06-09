@@ -31,7 +31,7 @@ const Index = ({ timePeriod, category, savedValues, id }) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => {
       dispatch(addCopy({ [id]: { [category]: values } }))
-    }, 0);
+    }, 2000);
   }
 
   const handleChange = val => {
@@ -43,7 +43,7 @@ const Index = ({ timePeriod, category, savedValues, id }) => {
     )
 
     action({ type: 'SET_VALUES', payload: newValues })
-    // saveValues(newValues)
+    // saveValues(newValues) - setTimeout breaks Slate - todo - find alternative
     dispatch(addCopy({ [id]: { [category]: newValues } }))
   }
 
